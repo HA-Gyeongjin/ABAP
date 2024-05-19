@@ -1,0 +1,41 @@
+<mvc:View
+    controllerName="sync.e25.homework12.controller.View1"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+    xmlns="sap.m">
+    <Page id="page" title="{i18n>title}">
+        <content>
+            <Panel 
+                headertext="Connections"
+                expandable="false"
+                expanded="true"
+                height="100%">
+                <Table
+                    items="{/ConnSet}"
+                    mode="SingleSelectMaster"
+                    selectionChange="onSelectionChange">
+                    <columns>
+                        <Column><Label text="항공사"/></Column>
+                        <Column><Label text="항공편번호"/></Column>
+                        <Column><Label text="출발국가"/></Column>
+                        <Column><Label text="출발도시"/></Column>
+                        <Column><Label text="도착국가"/></Column>
+                        <Column><Label text="도착도시"/></Column>
+                    </columns>
+                    <items>
+                        <ColumnListItem>
+                            <cells>
+                                <Text text="{Carrid}"/>
+                                <Text text="{Connid}"/>
+                                <Text text="{Countryfr}"/>
+                                <Text text="{Cityfrom}"/>
+                                <Text text="{Countryto}"/>
+                                <Text text="{Cityto}"/>
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+                </Table>
+            </Panel>
+        </content>
+    </Page>
+</mvc:View>

@@ -1,0 +1,53 @@
+<mvc:View controllerName="sync.e25.exercise13.controller.Main"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m">
+    <Page id="page" title="{i18n>title}">
+        <content> 
+            <!-- 모바일   : 접을 수 있고, 접혀 있는 상태로 출력
+                 데스크탑 : 접을 수 없고, 펼쳐 있는 상태로 출력
+
+                 device 모델의 /system/desktop 경로에는 
+                 데스크탑으로 웹페이지를 접근하면 true 가 기록되어 있다.
+                 아래와 같은 설정의 경우 데스크탑으로 접속하면
+                 expandable은 true 의 반대인 false 가 전달되고, ( 접을 수가 없다 )
+                 expanded 는 true 로 전달된다. ( 펼쳐져 있다 )
+
+                 데스크탑이 아닌 경우라면 ?? /system/desktop 은 false 가 된다.
+                 expandable은 false 의 반대인 true 가 전달되고, ( 접을 수가 있다 )
+                 expanded 는 false 가 전달된다. ( 접혀 있다 )
+            -->
+            <Panel headerText="Flights" 
+            expandable="{= !${device>/system/desktop}}" 
+              expanded="{device>/system/desktop}" 
+            >
+
+            <content>
+                <Table id="idTable"
+                       items="{/FlightSet}">
+                       <columns>
+                        <Column ><Label text="Carrier"/></Column>
+                        <Column ><Label text="Connections"/></Column>
+                        <Column ><Label text="Flight Date"/></Column>
+                        <Column ><Label text="Price"/></Column>
+                        <Column ><Label text="Availability"/></Column>
+                        <Column ><Label text="Free Seats"/></Column>
+                       </columns>
+
+                        <items>
+                            <ColumnListItem >
+                                <ObjectIdentifier title="{Carrid}" />
+                                <ObjectIdentifier title="{Connid}" />
+                                <ObjectIdentifier title="{Fldate}" />
+
+                                <ObjectNumber number="{Price}" unit="{Currency}" />
+                                <CheckBox selected=""/>
+                                <Text text="" />
+                            </ColumnListItem>
+                        </items>
+                </Table>
+            </content>
+
+            </Panel>
+        </content>
+    </Page>
+</mvc:View>

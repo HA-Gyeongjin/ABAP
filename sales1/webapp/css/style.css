@@ -1,0 +1,24 @@
+.sapMObjectNumber {
+    font-size: 3rem;
+    color: #000;
+  }
+
+.productName {
+    font-size: 2em; /* Adjust the size as needed */
+}
+
+.salesText {
+  color: #091;
+}
+
+.productPriceMargin {
+  margin-left: 15px; /* Adjust the margin as needed */
+}
+
+.totalBox {
+  padding: 1rem;
+  background-color: #ebebeb;
+  border-top: 1px solid #ddd;
+  font-weight: bold;
+  text-align: right;
+}

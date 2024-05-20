@@ -1,0 +1,52 @@
+<c:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:c="sap.ui.core"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:l="sap.ui.layout"
+    >
+
+    <Dialog id="idNewDialog" title="신규 항공사 정보" 
+            contentWidth="400px">
+        <content>
+        <f:SimpleForm layout="ResponsiveGridLayout" 
+            labelSpanS="4">
+        
+            <Label text="{i18n>labelCarrid}"/>
+            <Input value="{new>/Carrid}" 
+                    maxLength="3" 
+                    required="true" 
+                    editable="{view>/CreateMode}"
+                    enabled="{view>/CreateMode}"
+                    visible="{view>/CreateMode}">
+                <layoutData>
+                    <l:GridData span="S3" />
+                </layoutData>
+            </Input>
+
+            <Label text="{i18n>labelCarrname}"/>
+            <Input value="{new>/Carrname}"/>
+
+            <Label text="{i18n>labelCurrcode}"/>
+            <ComboBox items="{view>/Currency}" selectionChange="onCurrencyChange" 
+                        id="idComboBox" selectedKey="{new>/Currcode}">
+                <items>
+                    <c:Item key="{view>key}" text="{view>name}" />
+                </items>
+                <layoutData>
+                    <l:GridData span="S3"/>
+                </layoutData>
+            </ComboBox>
+            <!-- <Input value="{new>/Currcode}"/> -->
+
+            <Label text="{i18n>labelUrl}"/>
+            <Input value="{new>/Url}"/>
+
+        </f:SimpleForm>
+        </content>
+        <buttons>
+            <Button text="저장" press="onSaveConfirm" type="Accept"/>
+            <Button text="취소" press="onSaveCancel" type="Reject"/>
+        </buttons>
+    </Dialog>
+
+</c:FragmentDefinition>

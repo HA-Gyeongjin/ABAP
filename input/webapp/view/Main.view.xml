@@ -1,0 +1,54 @@
+<mvc:View controllerName="sync.e25.input.controller.Main"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.ui.layout.form">
+    <Page id="page" title="{i18n>title}">
+        <content> 
+
+            <Panel headerText="ID로 접근하여 값을 읽고 쓰고 해보기">
+                <!-- 값을 입력받기 위해서는 sap.m.Input 을 사용한다. -->
+                <f:SimpleForm layout="ResponsiveGridLayout">
+            
+                <Input id="idInput1" value="" type="Number"/>
+                <Input id="idInput2" value="" type="Number"/>
+                <Text id="idText" text="계산 결과가 출력될 예정입니다."/>
+                <Label text=""/>
+                <Button text="더하기" press="onAdd">
+                    <layoutData>
+                        <l:GridData indent="L8 M8 S8" span="L4 M4 S4"/>
+                    </layoutData>
+                </Button>
+                </f:SimpleForm>
+            </Panel>
+
+            <Panel headerText="JSON Model로 접근하여 값을 읽고 쓰고 해보기">
+                <f:SimpleForm layout="ResponsiveLayout">
+                    <Label text="숫자1"/>
+                    <Input value="{
+                        path: '/value1' ,
+                        type: 'sap.ui.model.type.Float'
+                    }"  type="Number"
+                        validationError = "onValidError"
+                        />
+                    <Label text="숫자2"/>
+                    <Input value="{
+                        path: '/value2',
+                        type: 'sap.ui.model.type.Integer',
+                        constraints: {
+                            minimum: 0,
+                            maximum: 100
+                        }
+                    }"  type="Number"
+                        validationError = "onValidError"
+                        />
+                    <Label text="결과" />
+                    <Input value="{/result}" editable="false" />
+
+                    <Label />
+                    <Button text="JSON Model로 더하기" press="onAddJSON"/>
+                </f:SimpleForm>
+            </Panel>
+        </content>
+    </Page>
+</mvc:View>

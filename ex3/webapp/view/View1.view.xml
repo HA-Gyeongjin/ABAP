@@ -1,0 +1,78 @@
+<mvc:View controllerName="sync.e25.ex3.controller.View1"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m"
+    xmlns:t="sap.ui.table"
+    xmlns:c="sap.ui.core">
+    <Page id="page" title="{i18n>title}">
+        <content> 
+            <t:Table rows="{/ConnectionSet}" id="idTable">
+
+                <t:columns>
+                    <t:Column >
+                        <Label text="{i18n>labelCarrid}"/>
+                        <t:template>
+                            <!-- 데이터가 등장하는 구역 -->
+                            <ObjectIdentifier title="{Carrid}"/>
+                        </t:template>
+                    </t:Column>
+
+                    <t:Column>
+                        <Label text="{i18n>labelConnid}"/>
+                        <t:template>
+                            <ObjectIdentifier title="{Connid}"/>
+                        </t:template>
+                    </t:Column>
+                    <t:Column>
+                        <Label text="{i18n>labelCityfrom}"/>
+                        <t:template>
+                            <Text text="{Cityfrom}({Countryfr})"/>
+                        </t:template>
+                    </t:Column>
+                    <t:Column>
+                        <Label text="{i18n>labelCityto}"/>
+                        <t:template>
+                            <Text text="{Cityto}({Countryto})"/>
+                        </t:template>
+                    </t:Column>
+                    <t:Column>
+                        <Label text="{i18n>labelFltime}"/>
+                        <t:template>
+                            <Text text="{ path: 'Deptime' ,
+                            type: 'sap.ui.model.odata.type.Time',
+                            formatOptions: {
+                                pattern: 'HH:mm:ss'
+                            } 
+                            }~{ path: 'Arrtime' ,
+                            type: 'sap.ui.model.odata.type.Time',
+                            formatOptions: {
+                                pattern: 'HH:mm:ss'
+                            } 
+                            } "/>
+                        </t:template>
+                    </t:Column>
+                    <t:Column>
+                        <Label text="{i18n>labelDistance}"/>
+                        <t:template>
+                        <ObjectNumber number="{
+                            parts: [ {path: 'Distance'}, {path: 'Distid'} ],
+                            type: 'sap.ui.model.type.Unit',
+                            formatOptions:{
+                                maxFractionDigits: 0,
+                                showMeasure: false
+                                }
+                            }" 
+                            unit="{Distid}"/>
+                        </t:template>
+                    </t:Column>
+                </t:columns>
+            </t:Table>
+        </content>
+        <footer>
+            <OverflowToolbar >
+                <ToolbarSpacer/>
+                <Button text="신규생성" icon="sap-icon://create" press="onCreate" type="Accept"/>
+                <Button text="삭제" icon="sap-icon://delete" type="Reject" press="onDelete"/>
+            </OverflowToolbar>
+        </footer>
+    </Page>
+</mvc:View>

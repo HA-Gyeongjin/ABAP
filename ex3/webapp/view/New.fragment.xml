@@ -1,0 +1,94 @@
+<c:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:c="sap.ui.core"
+    xmlns:f="sap.ui.layout.form"
+>
+<Dialog id="idNewDialog" icon="sap-icon://create" title="항공편 정보 신규생성" >
+
+ 
+    <content>
+        <f:SimpleForm layout="ResponsiveGridLayout" labelSpanS="4" title="항공사 정보">
+        
+            <Label text="{i18n>labelCarrid}" />
+            <Input value="{new>/Carrid}" 
+                maxLength="3" 
+                required="true" />
+            
+
+            <Label text="{i18n>labelConnid}" />
+            <Input value="{new>/Connid}" 
+                maxLength="4" 
+                required="true" />
+            </f:SimpleForm>
+            
+            <f:SimpleForm layout="ResponsiveGridLayout" labelSpanS="4" title="이동경로">
+                
+            <Label text="{i18n>labelCountryfr}" />
+            <Input value="{new>/Countryfr}" 
+                maxLength="2" />
+           
+            <Label text="{i18n>labelCityfrom}" />
+            <Input value="{new>/Cityfrom}" />    
+                
+            <Label text="{i18n>labelAirpfrom}" />
+            <Input value="{new>/Airpfrom}" 
+                maxLength="3" 
+                required="true"/>
+           
+            <Label text="{i18n>labelCountryto}" />
+            <Input value="{new>/Countryto}" 
+                maxLength="2" />
+
+            <Label text="{i18n>labelCityto}" />
+            <Input value="{new>/Cityto}" />    
+                
+            <Label text="{i18n>labelAirpto}" />
+            <Input value="{new>/Airpto}" 
+                maxLength="3" 
+                required="true"/>
+            </f:SimpleForm>
+
+            <f:SimpleForm layout="ResponsiveGridLayout" labelSpanS="4" title="시간 및 거리">
+            <Label text="{i18n>labelDeptime}" />
+                
+            <TimePicker value="{
+                path: '{new>/Deptime}',
+                type: 'sap.ui.model.odata.type.Time',
+                formatOptions:{
+                    pattern: 'hh:mm:ss a'
+                }
+                }"
+                editable="true"/>
+
+            <Label text="{i18n>labelArrtime}" />
+                
+            <TimePicker value="{ 
+                path: '{new>/Arrtime}',
+                type: 'sap.ui.model.odata.type.Time',
+                formatOptions:{
+                    pattern: 'hh:mm:ss a'
+                }
+                }"
+                editable="true"/>
+
+            <Label text="{i18n>labelDistance}"/>
+            <Input value="{ 
+                path: '{new>/Distance}',
+                type: 'sap.ui.model.odata.type.Float'}" />
+            <ComboBox selectedKey="{Distid}"
+            items="{distid>/Distid}" 
+            editable="true" placeholder="거리단위">
+            <items>
+                <!-- 위에 xmlns:c="sap.ui.core" 를 <mvc:View> 의 속성으로 추가 -->
+                <c:Item key="{distid>Key}" text="{distid>Name}" />
+            </items>
+            </ComboBox>
+                
+        </f:SimpleForm>
+    </content>
+    <buttons>
+        <Button text="저장" icon="sap-icon://save" press="onSaveConfirm" type="Accept"/>
+        <Button text="취소" icon="sap-icon://cancel" press="onSaveCancel" type="Reject"/>
+    </buttons>
+</Dialog>
+</c:FragmentDefinition>

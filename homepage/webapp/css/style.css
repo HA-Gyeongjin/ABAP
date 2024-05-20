@@ -1,0 +1,10 @@
+/* css/style.css */
+.clickableSection {
+    cursor: pointer;
+}
+
+.divider {
+    background-color: #ccc;
+    width: 1px;
+    height: 100%;
+}

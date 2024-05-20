@@ -1,0 +1,99 @@
+<mvc:View xmlns:table="sap.ui.table"
+    xmlns="sap.m"
+    controllerName="sync.ec.vizframe.controller.View1"
+    xmlns:viz="sap.viz.ui5.controls"
+    displayBlock="true"
+    xmlns:layout="sap.ui.layout"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+    xmlns:viz.data="sap.viz.ui5.data"
+    xmlns:cm="sap.suite.ui.commons"
+    height="100%">
+
+    <Page id="page" title="{i18n>title}">
+        <content>
+
+            <layout:FixFlex id="idFixFlex" minFlexSize="250">
+
+                <layout:fixContent>
+                    <Text text="항공사별 예약정보" />
+                </layout:fixContent>
+
+                <layout:flexContent>
+                    <cm:ChartContainer
+                        class="sapUiResponsiveContentPadding"
+                        id="idChartContainer"
+                        showFullScreen="true"
+                        showLegend="true"
+                        showLegendButton="true"
+                        showZoom="true"
+                        autoAdjustHeight="false"
+                        title="차트 컨테이너 제목">
+                        <cm:content>
+                            <cm:ChartContainerContent icon="sap-icon://bar-chart" title="차트">
+
+                                <cm:content>
+                                    <!-- 이 안에 차트를 그려줄 예정 -->
+                                    <viz:Popover id="idPopOver"></viz:Popover>
+                                    <viz:VizFrame
+                                        id="idVizFrame"
+                                        uiConfig="{applicationSet:'fiori'}"
+                                        height='500px'
+                                        width="100%"
+                                        vizType='bar'>
+                                        <viz:dataset>
+                                            <viz.data:FlattenedDataset data="{/FlightSumSet}">
+                                                <viz.data:dimensions>
+                                                    <viz.data:DimensionDefinition name="항공사" value="{Carrid}"/>
+                                                    <viz.data:DimensionDefinition name="항공편" value="{Connid}"/>
+                                                </viz.data:dimensions>
+                                                <viz.data:measures>
+                                                    <viz.data:MeasureDefinition name="최대좌석수" value="{Seatsmax}"/>
+                                                    <viz.data:MeasureDefinition name="예약좌석수" value="{Seatsocc}"/>
+                                                </viz.data:measures>
+                                            </viz.data:FlattenedDataset>
+                                        </viz:dataset>
+
+                                        <viz:feeds>
+                                            <viz.feeds:FeedItem id='valueAxisFeed' uid="valueAxis" type="Measure"
+                                                                values="최대좌석수,예약좌석수"/>
+                                            <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="항공사,항공편"/>
+                                        </viz:feeds>
+                                    </viz:VizFrame>
+                                </cm:content>
+
+                            </cm:ChartContainerContent>
+
+                            <cm:ChartContainerContent icon="sap-icon://table-view" title="데이터">
+
+                                <cm:content>
+                                    <!-- 이 안에는 차트에 사용된 데이터를 테이블로 보여줄 예정 -->
+                                    <Table items="{/FlightSumSet}" >
+                                        <columns>
+                                            <Column > <Label text="항공사 항공편"/> </Column>
+                                            <Column > <Label text="최대좌석수"/> </Column>
+                                            <Column > <Label text="예약좌석수"/> </Column>
+                                        </columns>
+                                        <items>
+                                            <ColumnListItem >
+                                                <ObjectIdentifier title="{Carrid}" text="{Connid}" />
+                                                <ObjectNumber number="{Seatsmax}" unit="석" />
+                                                <ObjectNumber number="{Seatsocc}" unit="석" />
+                                            </ColumnListItem >
+
+                                        </items>
+                                    </Table>
+                                </cm:content>
+
+                            </cm:ChartContainerContent>
+
+                        </cm:content>
+
+                    </cm:ChartContainer>
+                </layout:flexContent>
+
+            </layout:FixFlex>
+
+        </content>
+    </Page>
+</mvc:View>

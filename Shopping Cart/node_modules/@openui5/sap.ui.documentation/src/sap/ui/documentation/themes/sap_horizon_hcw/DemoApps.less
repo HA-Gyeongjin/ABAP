@@ -1,0 +1,44 @@
+.sapUiDemokit .sapUiDemoKitDemoAppsPage {
+	.sapUiDemoKitDemoAppsIntroCard.sapFCard {
+		background: @sapUiTileBackground;
+
+		.sapFCardHeader .sapFCardHeaderText {
+
+			.sapFCardTitle,
+			.sapFCardSubtitle {
+				color: @sapUiTileTextColor;
+			}
+		}
+	}
+
+	.sapUiDemoKitDemoAppsMain {
+		.sapUiDemoKitDemoAppsCardContentSpacing {
+			padding: 1rem;
+		}
+
+		[class*="sapUiDemoKitDemoAppsCategory"] .sapUiDemoKitDemoAppsRegularCard.sapFCard {
+			.sapFCardHeader {
+				background-color: @sapUiTileBackground;
+
+				.sapFCardHeaderText {
+
+					.sapFCardTitle,
+					.sapFCardSubtitle {
+						color: @sapUiTileTextColor;
+					}
+				}
+
+				.sapFCardHeaderImage .sapFCardIcon.sapFAvatar {
+
+					&:not(.sapMAvatarPressed):not(.sapMAvatarDisabled):hover {
+						background-color: unset;
+					}
+
+					.sapUiIcon {
+						color: @sapUiTileTextColor;
+					}
+				}
+			}
+		}
+	}
+}

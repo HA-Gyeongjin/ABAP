@@ -1,0 +1,51 @@
+<mvc:View controllerName="sync.e25.hw1review.controller.Main"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m">
+    <Page id="page" title="{i18n>title}">
+        <content> 
+            <Table  id="idTable" 
+                    items="{/ConnSet}" 
+                    mode="SingleSelectMaster"
+                    selectionChange="onSelectionChange"
+                    >
+                <columns>
+                    <Column >
+                        <Label text="{i18n>labelCarrid}" />
+                    </Column>
+                    <Column >
+                        <Label text="{i18n>labelConnid}" />
+                    </Column>
+                    <Column >
+                        <Label text="{i18n>labelCountryfr}" />
+                    </Column>
+                    <Column >
+                        <Label text="{i18n>labelCityfrom}" />
+                    </Column>
+                    <Column >
+                        <Label text="{i18n>labelCountryto}" />
+                    </Column>
+                    <Column >
+                        <Label text="{i18n>labelCityto}" />
+                    </Column>
+                </columns>
+            
+                <items>
+                    <ColumnListItem >
+                        <cells>
+<!-- 키필드를 표현하기 위한 ObjectIdentifier -->
+                            <ObjectIdentifier title="{Carrid}"/>
+                            <ObjectIdentifier title="{Connid}"/>
+                            
+                            <ObjectAttribute text="{Countryfr}"/>
+                            <ObjectAttribute text="{Cityfrom}"/>
+
+                            <Text text="{Countryto}"/>
+                            <Text text="{Cityto}"/>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+
+            </Table>
+        </content>
+    </Page>
+</mvc:View>

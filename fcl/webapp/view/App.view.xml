@@ -1,0 +1,31 @@
+<mvc:View controllerName="sync.ec.fcl.controller.App"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    height="100%">
+
+	<f:FlexibleColumnLayout
+		id="idFlexibleColumnLayout"
+		stateChange=".onStateChanged"
+		backgroundDesign="Solid"
+		layout="{comp>/layout}"/>
+        <!-- 모델 comp의 경로 /layout 에 담긴 정보가 "OneColumn" 이냐 "TwoColumnMidExpanded" 에 따라
+             화면구조가 달라진다. -->
+        
+    <!-- <f:FlexibleColumnLayout 
+        id="idFlexibleColumnLayout" 
+        backgroundDesign="Solid">
+
+        <f:beginColumnPages>
+            <mvc:XMLView id="beginView" viewName="sync.ec.fcl.view.Master"/>
+        </f:beginColumnPages>
+
+        <f:midColumnPages>
+            <mvc:XMLView id="detailView" viewName="sync.ec.fcl.view.Detail"/>
+        </f:midColumnPages>
+
+    </f:FlexibleColumnLayout> -->
+
+    
+</mvc:View>

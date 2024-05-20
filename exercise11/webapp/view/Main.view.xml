@@ -1,0 +1,67 @@
+<mvc:View
+    controllerName="sync.e25.exercise11.controller.Main"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    >
+    
+    <Page id="page" title="{i18n>title}">
+        <content>
+            <!-- 항공사 리스트를 위한 Panel -->
+            <Panel headerText="Carriers" expandable="true" expanded="true" height="270px">
+                <Table
+                    items="{/CarrierSet}"
+                    mode="SingleSelectLeft"
+                    selectionChange=".onSelectionChange">
+                    <columns>
+                        <Column ><Label text="항공사ID"/>
+                        </Column>
+                        <Column ><Label text="항공편번호"/>
+                        </Column>
+                        <Column ><Label text="통화코드"/>
+                        </Column>
+                        <Column ><Label text="홈페이지"/>
+                        </Column>
+                    </columns>
+                    <items>
+                        <ColumnListItem >
+                            <cells>
+                                <Text text="{Carrid}"/>
+                                <Text text="{Carrname}"/>
+                                <Text text="{Currcode}"/>
+                                <Link text="{Url}" href="{Url}"/>
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+
+                </Table>
+            </Panel>
+            <!-- 항공편 리스트를 위한 Panel -->
+            <Panel headerText="Flight Connections" expandable="true" expanded="true" height="100%">
+                <content>
+                    <!-- 상대경로를 사용하기 때문에 이 Table에게 bindElement를 적용하기 위해서 ID를 부여한다. -->
+                    <Table id="idConnTable" items="{toConnection}">
+                    <!-- <Table id="idConnTable" items="{/CarrierSet('AA')/toConnection}"> -->
+                        <columns>
+                        <Column ><Label text="Connection ID"/></Column>
+                        <Column ><Label text="City from"/></Column>
+                        <Column ><Label text="City to"/></Column>
+                        </columns>
+                        <items>
+                            <ColumnListItem >
+                                <cells>
+                                    <Text text="{Connid}"/>
+                                    <Text text="{Cityfrom}"/>
+                                    <Text text="{Cityto}"/>
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+                </content>
+            
+            </Panel>
+        </content>
+
+    </Page>
+</mvc:View>

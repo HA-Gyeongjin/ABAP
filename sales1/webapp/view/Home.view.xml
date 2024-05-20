@@ -1,0 +1,164 @@
+<mvc:View
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    controllerName="sync.zec.sales1.controller.Home"
+    id="Home">
+    
+    <f:FlexibleColumnLayout id="flexibleColumnLayout" layout="{appView>/layout}">
+      <f:beginColumnPages>
+        <!-- 왼쪽 컬럼의 콘텐츠 -->
+        <Page title="SSP 건강기능식품">
+            <content>
+                <List items="{/ItemSet}" class="sapUiResponsiveMargin" noDataText="No products available">
+                    <items>
+                        <CustomListItem type="Active" press="onSelectProduct">
+                            <HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiNoMargin">
+                                <Image src="../images/{Maktx}.jpg" width="80px" height="100px" class="sapUiTinyMarginEnd"/>
+                                <VBox class="sapUiNoMargin" width="100%">
+                                    <Title text="{Maktx}" level="H5" class="sapUiNoMargin"/>
+                                    <ObjectNumber number="{
+                                        parts:[
+                                            {path : 'Netpr'},
+                                            {path : 'Waers'}
+                                        ],
+                                        type:'sap.ui.model.type.Currency',
+                                        formatOptions:{showMeasure: false}
+                                    }"
+                                    numberUnit="{Waers}" class="sapUiNoMargin"/>
+                                    <Text text="판매중"  class="sapUiNoMargin salesText"/>
+                                </VBox>
+                            </HBox>
+                        </CustomListItem>
+                    </items>
+                </List>
+            </content>
+        </Page>
+    </f:beginColumnPages>
+
+        <f:midColumnPages>
+            <!-- 가운데 컬럼의 콘텐츠 -->
+            <Page title="{cart>/selectedProduct/Maktx}">
+                <customHeader>
+                    <Bar>
+                        
+                        <contentRight>
+                            <Button
+                                icon="sap-icon://customer"
+                                press=".onAvatarPress"
+                                tooltip="{i18n>avatarButtonTooltip}"/>
+                            <ToggleButton
+                                id="cartToggleButton"
+                                icon="sap-icon://cart"
+                                tooltip="{i18n>toCartButtonTooltip}"
+                                press=".onToggleCart"/>
+                        </contentRight>
+                    </Bar>
+                </customHeader>
+                <content>
+                  <VBox id="productDetails" class="sapUiSmallMargin">
+                    <HBox alignItems="Inherit">
+                        <Title text="{cart>/selectedProduct/Maktx}" level="H2" class="productName" />
+                        
+                          <ObjectNumber number="{
+                            parts:[
+                                {path : 'cart>/selectedProduct/Netpr'},
+                                {path : 'cart>/selectedProduct/Waers'}
+                            ],
+                            type:'sap.ui.model.type.Currency',
+                            formatOptions:{showMeasure: false}
+                        }"
+                        numberUnit="{cart>/selectedProduct/Waers}" class="productPriceMargin" />
+                    </HBox>
+                        <Text text="{cart>/selectedProduct/AdditionalText}"/>
+                        <Image src="../images/{cart>/selectedProduct/Maktx}.jpg" width="500px"/>
+                    </VBox>
+                </content>
+                <footer>
+                    <Toolbar>
+                        <ToolbarSpacer></ToolbarSpacer>
+                        <Button icon="sap-icon://cart-3" text="장바구니에 추가" press="onAddToCart" type="Emphasized"/>
+                    </Toolbar>
+                </footer>
+            </Page>
+        </f:midColumnPages>
+
+        <f:endColumnPages>
+            <!-- 장바구니 페이지 -->
+            <Page title="Your Cart">
+              <customHeader>
+                <Bar>
+                    <contentMiddle>
+                        <Title text="Your Cart" level="H3"/>
+                    </contentMiddle>
+                    <contentRight>
+                        <Button icon="sap-icon://edit" press="onEditCart" tooltip="Edit" visible="{= !${cart>/editMode} }"/>
+                    </contentRight>
+                </Bar>
+            </customHeader>
+                <VBox>
+                    <List
+                        id="cartList"
+                        items="{
+                            path: 'cart>/cartItems'
+                        }"
+                        >
+                        <items>
+                            <CustomListItem >
+                                <HBox justifyContent="SpaceBetween" alignItems="Center">
+                                  <VBox class="sapUiNoMargin">
+                                    <Text text="{= 'x ' + ${cart>Quantity}}" class="sapUiTinyMarginBottom" />
+                                    <HBox justifyContent="SpaceBetween" width="100%">
+                                        <Image src="{cart>Image}" width="50px" height="50px"/>
+                                        <VBox>
+                                            <Text text="{cart>Maktx}" class="sapUiTinyMarginBottom"/>
+                                        </VBox>
+                                    </HBox>
+                                </VBox>
+                                <VBox class="sapUiTinyMarginEnd">
+                                    <ObjectNumber number="{
+                                        parts:[
+                                            {path : 'cart>Netpr'},
+                                            {path : 'cart>Waers'}
+                                            ],
+                                            type:'sap.ui.model.type.Currency',
+                                            formatOptions:{showMeasure: false}
+                                        }"
+                                        numberUnit="{cart>Waers}" class="sapUiNoMargin"/>
+                                    </VBox>
+                                    <Button icon="sap-icon://delete" 
+                                            press="onDeleteItem" 
+                                            class="sapUiSmallMarginEnd"
+                                            visible="{= ${cart>/editMode} }" />
+                                </HBox>
+                            </CustomListItem> 
+                        </items>
+                    </List>
+                </VBox>
+                <footer>
+                  <Toolbar >
+                    <Text text="총 금액 : "/>
+                    <ObjectNumber number="{
+                      parts:[ 
+                          {path : 'cart>/totalPrice'},
+                          {path : 'cart>/cartItems/0/Waers'}
+                      ],
+                      type:'sap.ui.model.type.Currency',
+                      formatOptions:{showMeasure: false}
+                  }"
+                  numberUnit="{cart>/cartItems/0/Waers}" class="sapUiNoMargin"/>  
+                      <ToolbarSpacer />
+                      <Button text="결제하기" type="Accept" press="onPayment" visible="{= !${cart>/editMode} }"/>
+                        <Button
+                            text="변경사항 저장"
+                            type="Default"
+                            press="onSaveChanges"
+                            visible="{= ${cart>/editMode} }" />
+                  </Toolbar>
+                </footer>
+
+
+            </Page>
+        </f:endColumnPages>
+    </f:FlexibleColumnLayout>
+</mvc:View>

@@ -1,0 +1,174 @@
+<mvc:View controllerName="sync.e25.ex4.controller.View1"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m"
+    xmlns:t="sap.ui.table"
+    xmlns:c="sap.ui.core">
+    <Page id="page" title="{i18n>title}">
+        <content> 
+            <t:Table rows="{/ConnectionSet}" id="idTable" >
+
+                <t:columns>
+                    <t:Column width="100px">
+                        <Label text="{i18n>labelCarrid}"/>
+                        <t:template>
+                            <!-- 데이터가 등장하는 구역 -->
+                            <ObjectIdentifier title="{Carrid}"/>
+                        </t:template>
+                    </t:Column>
+
+                    <t:Column width="100px">
+                        <Label text="{i18n>labelConnid}" />
+                        <t:template>
+                            <ObjectIdentifier title="{Connid}"/>
+                        </t:template>
+                    </t:Column>
+
+                    <t:Column visible="{= !${view>/EditMode} }">
+                        <Label text="{i18n>labelCityfrom}"/>
+                        <t:template>
+                            <Text text="{Cityfrom}({Countryfr})" />
+                        </t:template>
+                    </t:Column>
+
+                    <t:Column visible="{view>/EditMode}" >
+                        <Label text="{i18n>labelCityfrom}"/>
+                        <t:template>
+                            <Input value="{
+                                path: 'Cityfrom'
+                            }" 
+                                valueLiveUpdate="true"
+                                />
+                        </t:template>
+                    </t:Column>
+
+                    <t:Column visible="{view>/EditMode}" width="80px">
+                        <Label text="{i18n>labelCountryfr}" />
+                        <t:template>
+                        <Input value="{
+                            path: 'Countryfr'
+                        }" 
+                            valueLiveUpdate="true" />
+                        </t:template>
+                    </t:Column>
+
+                    <t:Column>
+                        <Label text="{i18n>labelCityto}"/>
+                        <t:template>
+                            <HBox>
+                            <Text text="{Cityto}({Countryto})"
+                                visible="{= !${view>/EditMode} }"/>
+                            <Input value="{
+                                path: 'Cityto'
+                            }" 
+                                valueLiveUpdate="true"
+                                visible="{view>/EditMode}" />
+                            </HBox>
+                        </t:template>
+                    </t:Column>
+
+                    <t:Column visible="{view>/EditMode}" width="80px">
+                        <Label text="{i18n>labelCountryto}" />
+                        <t:template>
+                        <Input value="{
+                            path: 'Countryto'
+                        }" 
+                            valueLiveUpdate="true" />
+                        </t:template>
+                    </t:Column>
+
+                    <t:Column visible="{= !${view>/EditMode} }" >
+                        <Label text="{i18n>labelFltime}"
+                                visible="{= !${view>/EditMode} }"/>
+                        <t:template>
+                            <Text text="{ path: 'Deptime' ,
+                            type: 'sap.ui.model.odata.type.Time',
+                            formatOptions: {
+                                pattern: 'HH:mm:ss'
+                            } 
+                            }~{ path: 'Arrtime' ,
+                            type: 'sap.ui.model.odata.type.Time',
+                            formatOptions: {
+                                pattern: 'HH:mm:ss'
+                            } 
+                            } "
+                            visible="{= !${view>/EditMode} }" 
+                            />
+                        </t:template>
+                    </t:Column>
+
+                    <t:Column visible="{view>/EditMode}" width="150px">
+                        <Label text="{i18n>labelDeptime}" />
+                        <t:template>
+                        <TimePicker value="{
+                            path: 'Deptime',
+                            type: 'sap.ui.model.odata.type.Time',
+                            formatOptions:{
+                                pattern: 'HH:mm:ss a'
+                            }
+                            }"
+                            editable="true" />
+                        </t:template>
+                    </t:Column>
+
+                    <t:Column visible="{view>/EditMode}" width="150px">
+                        <Label text="{i18n>labelArrtime}" />
+                        <t:template>
+                        <TimePicker value="{
+                            path: 'Arrtime',
+                            type: 'sap.ui.model.odata.type.Time',
+                            formatOptions:{
+                                pattern: 'hh:mm:ss a'
+                            }
+                            }"
+                            editable="true"/>
+                        </t:template>
+                    </t:Column>
+
+                    <t:Column>
+                        <Label text="{i18n>labelDistance}"/>
+                        <t:template>
+                        <HBox>
+                        <ObjectNumber number="{
+                            parts: [ {path: 'Distance'}, {path: 'Distid'} ],
+                            type: 'sap.ui.model.type.Unit',
+                            formatOptions:{
+                                maxFractionDigits: 0,
+                                showMeasure: false
+                                }
+                            }" 
+                            unit="{Distid}"
+                            visible="{= !${view>/EditMode} }" />
+                        
+                        <Input value="{
+                            path: 'Distance'
+                        }" 
+                            valueLiveUpdate="true" 
+                            visible="{view>/EditMode}"/>
+                        <ComboBox selectedKey="{Distid}"
+                            items="{distid>/Distid}" 
+                            editable="true"
+                            visible="{view>/EditMode}">
+                        <items>
+                            <!-- 위에 xmlns:c="sap.ui.core" 를 <mvc:View> 의 속성으로 추가 -->
+                            <c:Item key="{distid>Key}" text="{distid>Name}" />
+                        </items>
+                    </ComboBox>
+                        
+                        </HBox>
+                        </t:template>
+                    </t:Column>
+                </t:columns>
+            </t:Table>
+            <Toolbar >
+                <ToolbarSpacer />
+                <Button text="수정모드전환" icon="sap-icon://edit" press="onEdit" 
+                        type="Up" visible="{= !${view>/EditMode}}"/>
+                <Button text="저장" icon="sap-icon://save" press="onSave" type="Accept"
+                        visible="{view>/EditMode}"/>
+                <Button text="수정모드취소" icon="sap-icon://edit" type="Reject" 
+                        press="onCancel" visible="{view>/EditMode}"/>
+            </Toolbar>
+        </content>
+        
+    </Page>
+</mvc:View>

@@ -1,0 +1,130 @@
+{
+  "_version": "1.17.0",
+  "sap.app": {
+    "id": "sync.ec.fcl",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:basic",
+      "version": "1.12.5",
+      "toolsId": "f02b74f3-43d1-43da-ac8f-0a9cdbb76b4f"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/sap/opu/odata/sap/YE25_EX01_FCL_SRV/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "localUri": "localService/metadata.xml",
+          "odataVersion": "2.0"
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.71.67",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.f": {},
+        "sap.suite.ui.generic.template": {},
+        "sap.ui.comp": {},
+        "sap.ui.generic.app": {},
+        "sap.ui.table": {},
+        "sap.ushell": {},
+        "sap.uxap": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "sync.ec.fcl.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {}
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    },
+    "rootView": {
+      "viewName": "sync.ec.fcl.view.App",
+      "type": "XML",
+      "async": false,
+      "id": "fcl"
+    },
+    "routing": {
+      "config":   {
+          "routerClass": "sap.f.routing.Router",
+          "viewType": "XML",
+          "viewPath": "sync.ec.fcl.view",
+          "controlId": "idFlexibleColumnLayout",
+          "transition": "slide",
+          "bypassed": { },
+          "async": true
+      },
+      "routes" :  [{
+        "pattern": ":layout:",
+        "name": "master",
+        "target": [
+          "master",
+          "detail"
+        ]
+      },
+      {
+        "pattern": "detail/{carrid}/{layout}",
+        "name": "detail",
+        "target": [
+          "master",
+          "detail"
+        ]
+      }],
+      "targets" : {
+				"master": {
+					"viewName": "Master",
+					"controlAggregation": "beginColumnPages"
+				},
+				"detail": {
+					"viewName": "Detail",
+					"controlAggregation": "midColumnPages"
+				}
+			}
+    }
+  }
+}

@@ -1,0 +1,40 @@
+<mvc:View
+    controllerName="sync.e25.exercise12.controller.Main"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+    xmlns="sap.m"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:core="sap.ui.core">
+    <Page id="page" title="{i18n>title}">
+        <content>
+            <f:SimpleForm layout="ResponsiveGridLayout">
+                <Label text="Carrier"/>
+                <Input
+                        value="{
+                        model: 'view',
+                        path: '/Carrid',
+                        type: 'sap.ui.model.type.String',
+                        constraints:{
+                            minLength: 1,
+                            maxLength: 3
+                        }
+                    }"
+                    validationError="onCarridValidError"
+                    valueLiveUpdate="true"
+                />
+
+                <Label text="Flight connection"/>
+                <Input 
+                    core:require="{
+                        Connid: 'sync/e25/exercise12/model/type/Connid'
+                    }"
+                    value="{
+                    model: 'view',
+                    path: '/Connid',
+                    type: 'sync.e25.exercise12.model.type.Connid'
+                    }"
+                />
+            </f:SimpleForm>
+        </content>
+    </Page>
+</mvc:View>

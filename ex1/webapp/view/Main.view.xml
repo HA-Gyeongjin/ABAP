@@ -1,0 +1,58 @@
+<mvc:View controllerName="sync.e25.ex1.controller.Main"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:l="sap.ui.layout">
+    <Page id="page" title="{i18n>title}">
+        <content>
+        <Panel headerText="{i18n>labelPanel}">
+            <l:HorizontalLayout>
+            <f:SimpleForm title="{i18n>labelInput}" width="600px" >
+                <l:HorizontalLayout >
+                    <Label text="숫자 1:" required="true"/>
+                    <Input value="{
+                        path: '/value1',
+                        type: 'sap.ui.model.type.Float'
+                    }"  type="Number"/>
+                </l:HorizontalLayout>
+                <l:HorizontalLayout >
+                    <Label text="숫자 2:" required="true"/>
+                    <Input value="{
+                        path: '/value2',
+                        type: 'sap.ui.model.type.Float'
+                    }"  type="Number" />
+                </l:HorizontalLayout >
+            </f:SimpleForm>
+
+            <f:SimpleForm title="{i18n>labelResult}" width="600px">
+                <l:VerticalLayout >
+                <l:HorizontalLayout >
+                    <Label text="덧셈 :" />
+                    <Input value="{/result1}" editable="false" />
+                    <Button text="{i18n>labelCalcul}" press="onAdd" />
+                </l:HorizontalLayout>
+
+                <l:HorizontalLayout >
+                    <Label text="뺄셈 :" />
+                    <Input value="{/result2}" editable="false" />
+                    <Button text="{i18n>labelCalcul}" press="onSub" />
+                </l:HorizontalLayout>
+                
+                <l:HorizontalLayout >
+                    <Label text="곱셈 :" />
+                    <Input value="{/result3}" editable="false" />
+                    <Button text="{i18n>labelCalcul}" press="onMul" />
+                </l:HorizontalLayout>
+                
+                <l:HorizontalLayout >
+                    <Label text="나눗셈 :" />
+                    <Input value="{/result4}" editable="false" />
+                    <Button text="{i18n>labelCalcul}" press="onDiv" />
+                </l:HorizontalLayout>            
+                </l:VerticalLayout>    
+            </f:SimpleForm>
+            </l:HorizontalLayout>
+        </Panel>
+        </content>
+    </Page>
+</mvc:View>

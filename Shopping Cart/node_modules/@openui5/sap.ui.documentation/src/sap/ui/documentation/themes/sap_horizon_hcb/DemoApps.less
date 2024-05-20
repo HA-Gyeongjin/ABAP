@@ -1,0 +1,21 @@
+.sapUiDemokit .sapUiDemoKitDemoAppsPage {
+	.sapUiDemoKitDemoAppsIntroCard.sapFCard {
+		background: @sapUiTileBackground;
+	}
+
+	.sapUiDemoKitDemoAppsMain {
+		.sapUiDemoKitDemoAppsCardContentSpacing {
+			padding: 1rem;
+		}
+
+		[class*="sapUiDemoKitDemoAppsCategory"] .sapUiDemoKitDemoAppsRegularCard.sapFCard {
+			.sapFCardHeader {
+				background-color: @sapUiTileBackground;
+
+				.sapFAvatar:not(.sapMAvatarPressed):not(.sapMAvatarDisabled):hover {
+					background-color: unset;
+				}
+			}
+		}
+	}
+}

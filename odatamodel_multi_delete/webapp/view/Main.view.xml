@@ -1,0 +1,63 @@
+<mvc:View controllerName="sync.e25.odatamodelmultidelete.controller.Main"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m"
+    xmlns:t="sap.ui.table"
+    xmlns:c="sap.ui.core">
+    <Page id="page" title="{i18n>title}">
+        <content>
+            <t:Table rows="{/CarrierSet}" id="idTable">
+
+                <t:columns>
+                    <t:Column >
+                        <Label text="{i18n>labelCarrid}"/>
+                        <t:template>
+                            <!-- 데이터가 등장하는 구역 -->
+                            <ObjectIdentifier title="{Carrid}"/>
+                        </t:template>
+                    </t:Column>
+
+                    <t:Column>
+                        <Label text="{i18n>labelCarrname}"/>
+                        <t:template>
+                            <ObjectAttribute text="{Carrname}"/>
+                        </t:template>
+                    </t:Column>
+
+                    <t:Column>
+                        <!-- 필드명이 등장 -->
+                        <Label text="{i18n>labelCurrcode}"/>
+                        <t:template>
+                            <ComboBox selectedKey="{Currcode}"
+                                    items="{view>/Currency}" 
+                                    editable="false">
+                                <items>
+                                    <!-- 위에 xmlns:c="sap.ui.core" 를 <mvc:View> 의 속성으로 추가 -->
+                                    <c:Item key="{view>Key}" text="{view>Key} : {view>Name}" />
+                                </items>
+                            </ComboBox>
+                        </t:template>
+                    </t:Column> 
+
+                    <t:Column>
+                        <Label text="{i18n>labelUrl}"/>
+                        <t:template>
+                            <Link href="{Url}" text="항공사 홈페이지 이동"/>
+                            <!-- xmlns:navpopover="sap.ui.comp.navpopover" -->
+                            <!-- <navpopover:SmartLink href="{Url}" text="항공사 홈페이지 이동"/> -->
+                        </t:template>
+                    </t:Column>
+                </t:columns>
+
+            </t:Table>
+
+        </content>
+        <footer>
+            <OverflowToolbar >
+                <content>
+                    <ToolbarSpacer/>
+                    <Button text="삭제" icon="sap-icon://delete" type="Emphasized" press="onDelete"/>
+                </content>
+            </OverflowToolbar>
+        </footer>
+    </Page>
+</mvc:View>

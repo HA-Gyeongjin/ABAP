@@ -1,0 +1,27 @@
+<mvc:View  controllerName="sync.zec.homepage.controller.homepage"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m">
+    <SplitApp id="idSplitApp">
+        <masterPages>
+            <Page id="idMasterPage" title="구매유형" class="noScroll">
+                <content>
+                    <HBox id="regularProductSection" width="100%" justifyContent="Center" alignItems="Center">
+                        <Image src="../images/일반판매.png" width="100%"/>
+                        <Text text="일반 상품" />
+                    </HBox>
+                    <HBox id="subscriptionProductSection" width="100%" justifyContent="Center" alignItems="Center">
+                        <Image src="../images/구독주문.png" width="100%"/>
+                        <Text text="구독 상품" />
+                    </HBox>
+
+                </content>
+            </Page>
+        </masterPages>
+        <detailPages>
+            <Page id="idDetailPage" title="상품정보" >
+                <content>
+                </content>
+            </Page>
+        </detailPages>
+    </SplitApp>
+</mvc:View>    

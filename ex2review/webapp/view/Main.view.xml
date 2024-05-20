@@ -1,0 +1,118 @@
+<mvc:View controllerName="sync.e25.ex2review.controller.Main"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m"
+    xmlns:t="sap.ui.table">
+    <Page id="page" title="{i18n>title}">
+        <content> 
+            <t:Table 
+                rows="{
+                    path: '/FlightSet',
+                    parameters: {
+                        expand: 'toConnection'
+                    }
+                }"
+                selectionMode="Single"
+                selectionBehavior="Row"
+                rowSelectionChange="onSelection"
+            >
+                <t:columns>
+
+                    <t:Column >
+                        <Label text="{i18n>labelCarrid}"/>
+                        <t:template>
+                            <ObjectIdentifier title="{Carrid}"/>
+                        </t:template>
+                    </t:Column>
+
+                    <t:Column >
+                        <Label text="{i18n>labelConnid}"/>
+                        <t:template>
+                            <ObjectIdentifier title="{Connid}"/>
+                        </t:template>
+                    </t:Column>
+
+                    <t:Column >
+                        <Label text="{i18n>labelFldate}"/>
+                        <t:template>
+                            <ObjectIdentifier title="{
+                                path: 'Fldate',
+                                type:'sap.ui.model.odata.type.DateTime',
+                                formatOptions: {
+                                    pattern:'yyyy-MM-dd'
+                                }
+                            }" />
+                        </t:template>
+                    </t:Column>
+
+                    <!-- 운임금액 -->
+                    <t:Column>
+                        <Label text="{i18n>labelPrice}"/>
+                        <t:template>
+                            <ObjectNumber
+                                number="{
+                                    parts: [ {path: 'Price'}, {path: 'Currency'}],
+                                    type: 'sap.ui.model.type.Currency',
+                                    formatOptions: {
+                                        showMeasure: false
+                                    }
+                                }"
+                                unit="{Currency}"
+                                textAlign="End"
+                            />
+                        </t:template> 
+                    </t:Column>
+
+                    <!-- 비행기 -->
+                    <t:Column >
+                        <Label text="{i18n>labelPlanetype}"/>
+                        <t:template>
+                            <Text text="{Planetype}"/>
+                        </t:template>
+                    </t:Column>
+                    <!-- 최대좌석수 -->
+                    <t:Column >
+                        <Label text="{i18n>labelSeatsmax}"/>
+                        <t:template>
+                            <Text text="{Seatsmax}"/>
+                        </t:template>
+                    </t:Column>
+                    <!-- 예약좌석수 -->
+                    <t:Column >
+                        <Label text="{i18n>labelSeatsocc}"/>
+                        <t:template>
+                            <Text text="{Seatsocc}"/>
+                        </t:template>
+                    </t:Column>
+                    <!-- 잔여좌석수 -->
+                    <t:Column >
+                        <Label text="{i18n>labelSeatsfre}"/>
+                        <t:template>
+                            <!-- Expression Binding : 계산, 조건-->
+                            <!-- EX) {= } -->
+                            <Text text="{= ${Seatsmax} - ${Seatsocc}}" />
+                        </t:template>
+                    </t:Column>
+                    <!-- 총예약금액 -->
+                    <t:Column >
+                        <Label text="{i18n>labelPaymentsum}"/>
+                        <t:template>
+                            <ObjectNumber 
+                                number="{
+                                    parts: [{path: 'Paymentsum'}, {path:'Currency'}],
+                                    type: 'sap.ui.model.type.Currency',
+                                    formatOptions: {
+                                        showMeasure: false
+                                    }
+                                }"
+                                unit="{Currency}"
+                                textAlign="End"
+                            />
+                        </t:template>
+                    </t:Column>
+                    
+
+                </t:columns>
+        </t:Table>
+        </content>
+    </Page>
+</mvc:View>

@@ -12,6 +12,7 @@
             <content>
                 <List items="{/ItemSet}" class="sapUiResponsiveMargin" noDataText="No products available">
                     <items>
+                        
                         <CustomListItem type="Active" press="onSelectProduct">
                             <HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiNoMargin">
                                 <Image src="../images/{Maktx}.jpg" width="80px" height="100px" class="sapUiTinyMarginEnd"/>

@@ -10,6 +10,7 @@
     "build": "rimraf dist && ui5 build --a"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@openui5/sap.f": "^1.60",
     "@openui5/sap.m": "^1.60",
     "@openui5/sap.ui.core": "^1.60",
@@ -20,6 +21,18 @@
   "devDependencies": {
     "@ui5/cli": "^3.10.1",
     "eslint": "^9.2.0",
+=======
+    "@openui5/sap.m": "^1.60",
+    "@openui5/sap.f": "^1.60",
+    "@openui5/sap.ui.core": "^1.60",
+    "@openui5/sap.ui.layout": "^1.60",
+    "@openui5/themelib_sap_belize": "^1.60",
+    "@openui5/sap.ui.documentation": "^1.60"
+  },
+  "devDependencies": {
+    "@ui5/cli": "^1.0.0",
+    "eslint": "^4.19.1",
+>>>>>>> 7c7519c72ebe46c59868d44dcecc62634d6e408a
     "rimraf": "^2.6.2"
   }
 }

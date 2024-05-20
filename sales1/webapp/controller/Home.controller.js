@@ -22,6 +22,8 @@ sap.ui.define([
 
             // Listen to screen size changes
             Device.media.attachHandler(this._onResize.bind(this), null, Device.media.RANGESETS.SAP_STANDARD);
+
+            
         },
 
         onToggleCart: function (oEvent) {
@@ -46,7 +48,6 @@ sap.ui.define([
             }
 
             var aCartItems = oCartModel.getProperty("/cartItems");
-
             var oExistingItem = aCartItems.find(function(item) {
                 return item.Maktx === oSelectedProduct.Maktx;
             });

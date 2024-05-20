@@ -1,0 +1,62 @@
+<mvc:View controllerName="sync.zec.sales1.controller.Home"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m">
+    <SplitApp>
+    <masterPages>
+      <Page title="Product Catalog">
+        <List>
+          <StandardListItem title="Accessories (34)" />
+          <StandardListItem title="Computer System Accessories (7)" />
+          <StandardListItem title="Desktop Computers (5)" />
+          <StandardListItem title="Flat Screen TVs (3)" />
+          <StandardListItem title="Flat Screens (3)" />
+          <StandardListItem title="Graphics Card (4)" />
+          <StandardListItem title="Keyboards (4)" />
+          <StandardListItem title="Laptops (11)" />
+          <StandardListItem title="Mice (7)" />
+          <StandardListItem title="Printers (9)" />
+          <StandardListItem title="Scanners (4)" />
+          <StandardListItem title="Servers (3)" />
+          <StandardListItem title="Smartphones and Tablets (9)" />
+          <StandardListItem title="Software (8)" />
+          <StandardListItem title="Speakers (3)" />
+          <StandardListItem title="Telecommunication (3)" />
+        </List>
+      </Page>
+    </masterPages>
+    <detailPages>
+      <Page title="Welcome to the Shopping Cart">
+        
+          <Title text="Deal of the Day\n10% on all tablets!" level="H1" />
+          <HBox>
+
+            <VBox>
+            <List items="{/ItemSet}" >
+            <CustomListItem>
+                <VBox justifyContent="SpaceBetween" alignItems="Start">
+                  <HBox>
+                    <ObjectIdentifier title="{Matnr}" text="Availability" />
+                    <Image src="../images/다운로드.jpg" width="200px" height="200px" />
+                  </HBox>
+                  <HBox alignItems="Center" >
+                    <Text text="{ path : 'Netpr',
+                                  type: 'sap.model.odata.Currency' } KRW" class=".sapMObjectNumber" />
+                    <Button icon="sap-icon://cart"  />
+                  </HBox>
+                </VBox>
+              </CustomListItem>
+              <!-- <Text text="Promoted Items" /> -->
+              <!-- <ObjectListItem
+              title="{Matnr}"
+              number="{Netpr} KRW">
+              <attributes>
+                <ObjectAttribute text="sad" />
+              </attributes>
+            </ObjectListItem> -->
+            </List>
+            </VBox>
+          </HBox>
+      </Page>
+    </detailPages>
+  </SplitApp>
+</mvc:View>

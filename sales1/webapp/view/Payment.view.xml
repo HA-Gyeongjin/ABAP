@@ -68,129 +68,142 @@
                 <RadioButtonGroup
             id="paymentTypeGroup"
             columns="2"
-            selectedIndex="{paymentCart>/selectedIndex}">
+            selectedIndex="{paymentCart>/selectedIndex}"
+			select="onPaymentTypeSelect" >
                     <buttons>
                         <RadioButton text="Card" />
                         <RadioButton text="KakaoPay" />
                     </buttons>
                 </RadioButtonGroup>
             </VBox>
-            <Button text="Next" press="onNextStep" enabled="{paymentCart>/paymentTypeSelected}"/>
+            <Button text="단계 3" press="onNextStep" />
         </WizardStep>
 
-       
+		<WizardStep
+			id="cardInfoStep"
+			title="{i18n>checkoutCreditCardCreditCardInfo}"
+			nextStep="invoiceStep"
+			activate=".onCheckStepActivation"
+			icon="sap-icon://credit-card"
+			validated="false"
+			visible="{paymentCart>/showCardInfo}">
+		<f:SimpleForm
+			editable="true"
+			layout="ResponsiveGridLayout">
+			<Label
+				labelFor="creditCardHolderName"
+				text="{i18n>checkoutCreditCardName}"
+				required="true">
+				<layoutData>
+					<l:GridData span="XL4 L4 M4 S12"/>
+				</layoutData>
+			</Label>
+			<Input
+				id="creditCardHolderName"
+				placeholder="{i18n>creditCardHolderText}"
+				value="{
+					path: '/CreditCard/Name',
+					type: 'sap.ui.model.type.String',
+					constraints: {
+						minLength: 2,
+					search: '^[a-zA-Z가-힣]+$'
+					}	
+				}"
+				valueStateText="이름은 최소 2자리 이상이어야 하며, 숫자나 특수문자를 포함할 수 없습니다."
+				change="checkCardHolderName">
+				<layoutData>
+					<l:GridData span="XL8 L8 M8 S12"/>
+				</layoutData>
+			</Input>
+			<Label
+				text="{i18n>checkoutCreditCardCardNo}"
+				labelFor="creditCardNumber"
+				required="true">
+				<layoutData>
+					<l:GridData span="XL4 L4 M4 S12"/>
+				</layoutData>
+			</Label>
+			<MaskInput
+				id="creditCardNumber"
+				placeholder="{i18n>creditCardNumberText}"
+				mask="CCCC-CCCC-CCCC-CCCC"
+				placeholderSymbol="_"
+				value="{
+					path: '/CreditCard/CardNumber',
+					type: 'sap.ui.model.type.String',
+					constraints: {
+						search: '^[0-9-]+$',
+						minLength: 19
+					}
+				}"
+				change="checkCardNumber">
+				<rules>
+					<MaskInputRule
+						maskFormatSymbol="C"
+						regex="[0-9]"/>
+				</rules>
+				<layoutData>
+					<l:GridData span="XL8 L8 M8 S12"/>
+				</layoutData>
+			</MaskInput>
+			<Label
+				text="{i18n>checkoutCreditCardCode}"
+				labelFor="creditCardSecurityNumber"
+				required="true">
+				<layoutData>
+					<l:GridData span="XL4 L4 M4 S12"/>
+				</layoutData>
+			</Label>
+			<MaskInput
+				id="creditCardSecurityNumber"
+				placeholder="{i18n>creditCardSecurityNumberText}"
+				mask="CCC"
+				placeholderSymbol="_"
+				value="{
+					path: '/CreditCard/SecurityCode',
+					type: 'sap.ui.model.type.String',
+					constraints: {
+						minLength: 3,
+						search: '^[0-9]+$'
+					}
+				}"
+				change="checkSecurityCode">
+				<rules>
+					<MaskInputRule
+						maskFormatSymbol="C"
+						regex="[0-9]"/>
+				</rules>
+				<layoutData>
+					<l:GridData span="XL8 L8 M8 S12"/>
+				</layoutData>
+			</MaskInput>
+			<Label text="{i18n>checkoutCreditCardExpiration}">
+				<layoutData>
+					<l:GridData span="XL4 L4 M4 S12"/>
+				</layoutData>
+			</Label>
+			<DatePicker
+				id="creditCardExpirationDate"
+				value="{
+					path: '/CreditCard/Expire',
+					type: 'sap.ui.model.type.String',
+					constraints: {
+						minLength: 7,
+						maxLength: 7
+					}
+				}"
+				valueFormat="MM/YYYY"
+				displayFormat="MM/YYYY"
+				required="true"
+				change="checkExpirationDate">
+				<layoutData>
+					<l:GridData span="XL8 L8 M8 S12"/>
+				</layoutData>
+			</DatePicker>
+		</f:SimpleForm>
+	</WizardStep>
 
-        <WizardStep id="creditCardDetailsStep" title="Credit Card Details">
-            <f:SimpleForm
-								editable="true"
-								layout="ResponsiveGridLayout">
-								<Label
-									labelFor="creditCardHolderName"
-									text="카드 소지자 이름"
-									required="true">
-									<layoutData>
-										<l:GridData span="XL4 L4 M4 S12"/>
-									</layoutData>
-								</Label>
-								<Input
-									id="creditCardHolderName"
-									placeholder="이름을 입력해주세요"
-									value="{
-										type: 'sap.ui.model.type.String',
-										constraints: {
-											minLength: 3,
-											search: '^[a-zA-Z]+[\\s]?[a-zA-Z]+$'
-										}
-									}"
-									change="checkCreditCardStep">
-									<layoutData>
-										<l:GridData span="XL8 L8 M8 S12"/>
-									</layoutData>
-								</Input>
-								<Label
-									text="카드번호"
-									labelFor="creditCardNumber"
-									required="true">
-									<layoutData>
-										<l:GridData span="XL4 L4 M4 S12"/>
-									</layoutData>
-								</Label>
-								<MaskInput
-									id="creditCardNumber"
-									placeholder="카드번호를 입력해주세요"
-									mask = "CCCC-CCCC-CCCC-CCCC"
-									placeholderSymbol = "_"
-									value="{
-										type: 'sap.ui.model.type.String',
-										constraints: {
-											search: '^[0-9-]+$',
-											minLength: 16
-										}
-									}"
-									change="checkCreditCardStep">
-									<rules>
-										<MaskInputRule
-											maskFormatSymbol="C"
-											regex="[0-9]"/>
-									</rules>
-									<layoutData>
-										<l:GridData span="XL8 L8 M8 S12"/>
-									</layoutData>
-								</MaskInput>
-								<Label
-									text="CVC"
-									labelFor="creditCardSecurityNumber"
-									required="true">
-									<layoutData>
-										<l:GridData span="XL4 L4 M4 S12"/>
-									</layoutData>
-								</Label>
-								<MaskInput
-									id="creditCardSecurityNumber"
-									placeholder="카드 뒷면의 CVC 번호를 입력해주세요"
-									mask = "CCC"
-									placeholderSymbol = "_"
-									value="{
-										type: 'sap.ui.model.type.String',
-										constraints: {
-											minLength: 3,
-											search: '^[0-9]+$'
-										}
-									}"
-									change="checkCreditCardStep">
-									<rules>
-										<MaskInputRule
-											maskFormatSymbol ="C"
-											regex = "[0-9]"/>
-									</rules>
-									<layoutData>
-										<l:GridData span="XL8 L8 M8 S12"/>
-									</layoutData>
-								</MaskInput>
-								<Label text="유효기한을 입력해주세요">
-									<layoutData>
-										<l:GridData span="XL4 L4 M4 S12"/>
-									</layoutData>
-								</Label>
-								<DatePicker
-									id="creditCardExpirationDate"
-									value="{
-										type: 'sap.ui.model.type.String',
-										constraints: {
-											minLength: 7,
-											maxLength: 7
-										}
-									}"
-									valueFormat="MM/YYYY"
-									displayFormat="MM/YYYY"
-									required="true"
-									change="checkCreditCardStep">
-									<layoutData>
-										<l:GridData span="XL8 L8 M8 S12"/>
-									</layoutData>
-								</DatePicker>
-							</f:SimpleForm>
-						</WizardStep>
+						<!-- <Button text="Submit" press="onSubmit" /> -->
             
         <WizardStep title="Review">
             <!-- Your content for review -->

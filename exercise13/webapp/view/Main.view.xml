@@ -25,18 +25,28 @@
                 <Table id="idTable"
                        items="{/FlightSet}">
                        <columns>
+<<<<<<< HEAD
                             <Column ><Label text="Carrier"/></Column>
                             <Column ><Label text="Connections"/></Column>   
                             <Column ><Label text="Flight Date"/></Column>
                             <Column ><Label text="Price"/></Column>
                             <Column ><Label text="Availability"/></Column>
                             <Column ><Label text="Free Seats"/></Column>
+=======
+                        <Column ><Label text="Carrier"/></Column>
+                        <Column ><Label text="Connections"/></Column>
+                        <Column ><Label text="Flight Date"/></Column>
+                        <Column ><Label text="Price"/></Column>
+                        <Column ><Label text="Availability"/></Column>
+                        <Column ><Label text="Free Seats"/></Column>
+>>>>>>> 7c7519c72ebe46c59868d44dcecc62634d6e408a
                        </columns>
 
                         <items>
                             <ColumnListItem >
                                 <ObjectIdentifier title="{Carrid}" />
                                 <ObjectIdentifier title="{Connid}" />
+<<<<<<< HEAD
                                 <ObjectIdentifier title="{
                                                     path: 'Fldate',
                                                     type: 'sap.ui.model.type.Date',
@@ -53,6 +63,11 @@
                                                     }
                                                 }" 
                                     unit="{Currency}" />
+=======
+                                <ObjectIdentifier title="{Fldate}" />
+
+                                <ObjectNumber number="{Price}" unit="{Currency}" />
+>>>>>>> 7c7519c72ebe46c59868d44dcecc62634d6e408a
                                 <CheckBox selected=""/>
                                 <Text text="" />
                             </ColumnListItem>

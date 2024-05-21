@@ -120,6 +120,12 @@
           "pattern": "summary",
           "name": "RouteSummary",
           "target": "TargetSummary"
+        },
+
+        {
+          "pattern": "success",
+          "name": "RouteSuccess",
+          "target": "TargetSuccess"
         }
 
       ],
@@ -143,6 +149,12 @@
           "viewId": "Summary",
           "viewName": "Summary",
           "viewLevel": 2
+        },
+
+        "TargetSuccess": {
+          "viewId": "Success",
+          "viewName": "Success",
+          "viewLevel": 1
         }
       }
     },

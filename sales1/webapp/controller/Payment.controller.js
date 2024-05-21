@@ -36,7 +36,7 @@ sap.ui.define([
             oCartModel.setProperty("/expiryDate", "");
 
             // 결제 단계 모델 초기화
-            oCartModel.setProperty("/selectedPaymentType", "");
+            oCartModel.setProperty("/selectedPaymentType", "Card");
             oCartModel.setProperty("/paymentTypeSelected", false);
             oCartModel.setProperty("/showCardInfo", false);
             oCartModel.setProperty("/isCardInfoValid", false); // Initialize validation state
@@ -52,29 +52,42 @@ sap.ui.define([
 
         // New method to handle summary route pattern matched
         _onSummaryPatternMatched: function (oEvent) {
-            var sSummaryData = oEvent.getParameter("arguments").summaryData;
-            var oSummaryData = JSON.parse(decodeURIComponent(sSummaryData));
-            var oCartModel = this.getOwnerComponent().getModel("cart");
-            oCartModel.setProperty("/summaryData", oSummaryData);
+
         },
 
         _onPatternMatched: function (oEvent) {
             var sCartItems = oEvent.getParameter("arguments").cartItems;
             var aCartItems = JSON.parse(decodeURIComponent(sCartItems));
-            var oCartModel = this.getOwnerComponent().getModel("cart");
+            var oCartModel = this.getView().getModel("cart");
             oCartModel.setProperty("/cartItems", aCartItems);
 
-            // Wizard 초기화
+            var sStepId = oEvent.getParameter("arguments").stepId;
+            if (sStepId) {
+                this._goToStep(sStepId);
+            }
+        },
+
+        _goToStep: function (sStepId) {
             var oWizard = this.byId("paymentWizard");
-            oWizard.discardProgress(oWizard.getSteps()[0]);
+            var oStep = this.byId(sStepId);
+            if (oStep) {
+                oWizard.discardProgress(oStep);
+                oWizard.goToStep(oStep);
+            }
         },
 
         onPaymentTypeSelect: function (oEvent) {
             var oCartModel = this.getView().getModel("cart");
             var sSelectedKey = oEvent.getParameter("button").data("paymentType");
+
+            // summaryData의 selectedPaymentType 경로에 값을 설정합니다.
             oCartModel.setProperty("/selectedPaymentType", sSelectedKey);
             oCartModel.setProperty("/paymentTypeSelected", true);
             oCartModel.setProperty("/showCardInfo", sSelectedKey === "Card");
+
+            // 설정된 값을 로그로 확인합니다.
+            console.log("Selected Payment Type:", sSelectedKey);
+            console.log("Cart Model:", oCartModel.getProperty("/summaryData/selectedPaymentType"));
         },
 
         onNextStep: function () {
@@ -105,7 +118,7 @@ sap.ui.define([
                          oView.byId("creditCardSecurityNumber").getValueState() === "None" && oView.byId("creditCardSecurityNumber").getValue().trim() !== "" &&
                          oView.byId("creditCardExpirationDate").getValueState() === "None" && oView.byId("creditCardExpirationDate").getValue().trim() !== "";
         
-            this.getView().getModel("paymentCart").setProperty("/isCardInfoValid", bValid);
+            this.getView().getModel("cart").setProperty("/isCardInfoValid", bValid);
         },
 
         checkCardHolderName: function(oEvent) {
@@ -228,44 +241,70 @@ sap.ui.define([
                         if(extraAddr !== ''){
                             extraAddr = ' (' + extraAddr + ')';
                         }
-                        this.getView().byId("sample6_extraAddress").setValue(extraAddr);
+                        this.getView().byId("idExtraAddress").setValue(extraAddr);
                     } else {
-                        this.getView().byId("sample6_extraAddress").setValue('');
+                        this.getView().byId("idExtraAddress").setValue('');
                     }
 
-                    this.getView().byId('sample6_postcode').setValue(data.zonecode);
-                    this.getView().byId("sample6_address").setValue(addr);
-                    this.getView().byId("sample6_detailAddress").focus();
+                    this.getView().byId('idPostcode').setValue(data.zonecode);
+                    this.getView().byId("idAddress").setValue(addr);
+                    this.getView().byId("idDetailAddress").focus();
                 }.bind(this)
             }).open();
         },
-
         onCheck: function () {
             var oCartModel = this.getView().getModel("cart");
-            // var oGlobalModel = this.getView().getModel("globalModel");
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-            
+
             var oSummaryData = {
-                items: oCartModel.getProperty("/cartItems"),
-                paymentType: oCartModel.getProperty("/selectedPaymentType"),
-                bankDetails: {
-                    beneficiaryName: "Singapore Hardware e-Commerce LTD",
-                    bankName: "CITY BANK, SINGAPORE BRANCH",
-                    accountNumber: "06110702027218"
-                },
-                invoiceAddress: {
-                    address: "sdasasd",
-                    city: "sesadsa"
-                },
-                total: this._calculateTotal(oCartModel.getProperty("/cartItems"))
+                cartItems: oCartModel.getProperty("/cartItems"),
+                selectedPaymentType: oCartModel.getProperty("/selectedPaymentType"),
+                cardOwner: oCartModel.getProperty("/cardOwner"),
+                cardNumber: oCartModel.getProperty("/cardNumber"),
+                cvc: oCartModel.getProperty("/cvc"),
+                expiryDate: oCartModel.getProperty("/expiryDate"),
+                totalPrice: oCartModel.getProperty("/totalPrice"),
+                deliveryAddress: {
+                    postcode: this.getView().byId("idPostcode").getValue(),
+                    address: this.getView().byId("idAddress").getValue(),
+                    detailAddress: this.getView().byId("idDetailAddress").getValue(),
+                    extraAddress: this.getView().byId("idExtraAddress").getValue()
+                }
             };
+
+            // cart 모델에 summaryData를 설정합니다.
+            oCartModel.setProperty("/summaryData", oSummaryData);
+
+            // 페이지 이동
+            oRouter.navTo("RouteSummary");
+        },
+
+        // onCheck: function () {
+        // var oCartModel = this.getView().getModel("cart");
+            // var oGlobalModel = this.getView().getModel("globalModel");
+        // var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+            
+            // var oSummaryData = {
+            //     items: oCartModel.getProperty("/cartItems"),
+            //     paymentType: oCartModel.getProperty("/selectedPaymentType"),
+            //     bankDetails: {
+            //         beneficiaryName: "Singapore Hardware e-Commerce LTD",
+            //         bankName: "CITY BANK, SINGAPORE BRANCH",
+            //         accountNumber: "06110702027218"
+            //     },
+            //     invoiceAddress: {
+            //         address: "sdasasd",
+            //         city: "sesadsa"
+            //     },
+            //     total: this._calculateTotal(oCartModel.getProperty("/cartItems"))
+            // };
 
             // 글로벌 모델에 데이터 설정
             // oGlobalModel.setProperty("/summaryData", oSummaryData);
 
             // 페이지 이동
-            oRouter.navTo("RouteSummary");
-        },
+        // oRouter.navTo("RouteSummary");
+        // },
         
         _calculateTotal: function (aCartItems) {
             return aCartItems.reduce(function (acc, item) {
@@ -280,10 +319,10 @@ sap.ui.define([
 
         _checkAllInputFilled: function () {
             var aInputIds = [
-                "sample6_postcode",
-                "sample6_address",
-                "sample6_detailAddress",
-                "sample6_extraAddress"
+                "idPostcode",
+                "idAddress",
+                "idDetailAddress",
+                "idExtraAddress"
             ];
 
             return aInputIds.every(function (sId) {

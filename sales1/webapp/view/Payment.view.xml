@@ -20,7 +20,7 @@
 
         <content>
     <Wizard id="paymentWizard" showNextButton="false">
-        <WizardStep title="Items" >
+        <WizardStep title="Items" id="itemsStep">
             <VBox>
                 <List id="itemsList" items="{cart>/cartItems}">
                     <CustomListItem>
@@ -65,7 +65,7 @@
         <WizardStep id="paymentTypeStep" title="Payment Type" >
             <VBox>
                 <Text text="Please select your payment method:" />
-                <SegmentedButton select=".onPaymentTypeSelect">
+                <SegmentedButton select="onPaymentTypeSelect" >
                     <buttons>
                         <Button text="Card">
                             <customData>
@@ -105,7 +105,7 @@
 				id="creditCardHolderName"
 				placeholder="{i18n>creditCardHolderText}"
 				value="{
-					path: '/CreditCard/Name',
+					path: 'cart>/cardOwner',
 					type: 'sap.ui.model.type.String',
 					constraints: {
 						minLength: 2,
@@ -133,7 +133,7 @@
 				mask="CCCC-CCCC-CCCC-CCCC"
 				placeholderSymbol="_"
 				value="{
-					path: '/CreditCard/CardNumber',
+					path: 'cart>/cardNumber',
 					type: 'sap.ui.model.type.String',
 					constraints: {
 						search: '^[0-9-]+$',
@@ -165,7 +165,7 @@
 				mask="CCC"
 				placeholderSymbol="_"
 				value="{
-					path: '/CreditCard/SecurityCode',
+					path: 'cart>/cvc',
 					type: 'sap.ui.model.type.String',
 					constraints: {
 						minLength: 3,
@@ -191,7 +191,7 @@
 			<DatePicker
 				id="creditCardExpirationDate"
 				value="{
-					path: '/CreditCard/Expire',
+					path: 'cart>/expiryDate',
 					type: 'sap.ui.model.type.String',
 					constraints: {
 						minLength: 7,
@@ -211,13 +211,13 @@
 	</WizardStep>
 
             
-        <WizardStep title="배송지 입력" id="idAddress">
+        <WizardStep title="배송지 입력" id="idDestination">
             <VBox>
-                <Input id="sample6_postcode" placeholder="우편번호" liveChange=".onInputChange"/>
+                <Input id="idPostcode" placeholder="우편번호" liveChange=".onInputChange"/>
                 <Button text="우편번호 찾기" press=".onFindAddress" />
-				<Input id="sample6_address" placeholder="주소" liveChange=".onInputChange"/>
-				<Input id="sample6_detailAddress" placeholder="상세주소" liveChange=".onInputChange"/>
-				<Input id="sample6_extraAddress" placeholder="참고항목" liveChange=".onInputChange"/>
+				<Input id="idAddress" placeholder="주소" liveChange=".onInputChange"/>
+				<Input id="idDetailAddress" placeholder="상세주소" liveChange=".onInputChange"/>
+				<Input id="idExtraAddress" placeholder="참고항목" liveChange=".onInputChange"/>
             </VBox>
             <Button id="checkButton" text="주문확인" press=".onCheck" enabled="false" />
         </WizardStep>

@@ -7,46 +7,38 @@
     xmlns:f="sap.ui.layout.form">
 
     <Page id="summaryPage" backgroundDesign="Solid" showHeader="false" title="Order Summary">
-		<landmarkInfo>
-			<PageAccessibleLandmarkInfo
-				rootRole="Region" rootLabel="{i18n>Checkout_rootLabel}"
-				contentRole="Main" contentLabel="{i18n>Checkout_summaryContentLabel}"
-				footerRole="Banner" footerLabel="{i18n>Checkout_footerLabel}"/>
-		</landmarkInfo>
-		<content>
-			<Panel>
-				<headerToolbar>
-					<Toolbar id="toolbarProductList">
-						<Title id="checkoutItems" text="{i18n>checkoutSummaryTitle1}" level="H2" titleStyle="H4"/>
-						<ToolbarSpacer/>
-						<Button id="backtoList" icon="sap-icon://edit" tooltip="{i18n>backToWizard}" type="Emphasized" press="._navBackToStep">
-							<customData>
-								<core:CustomData key="navBackTo" value="contentsStep"/>
-							</customData>
-						</Button>
-					</Toolbar>
-				</headerToolbar>
-				<content>
-					<List id="summaryEntryList" items="{cart>/cartItems}" noDataText="{i18n>cartNoData}">
-						<items>
-							<ObjectListItem intro="{cart>Quantity} x" icon="{cart>Image}" title="{cart>Maktx}" number="{
-								parts:[
-									{path : 'cart>Netpr'},
-									{path : 'cart>Waers'}
-								],
-								type:'sap.ui.model.type.Currency',
-								formatOptions:{showMeasure: false}
-							}" numberUnit="{cart>Waers}" class="sapUiNoMargin">
-								<firstStatus>
-									<ObjectStatus text="{cart>Status}" state="{cart>StatusState}"/>
-								</firstStatus>
-							</ObjectListItem>
-						</items>
-					</List>
-				</content>
-			</Panel>
-
-			<!-- Add other SimpleForms and content as needed -->
+        <content>
+            <Panel>
+                <headerToolbar>
+                    <Toolbar id="toolbarProductList">
+                        <Title id="checkoutItems" text="{i18n>checkoutSummaryTitle1}" level="H2" titleStyle="H4"/>
+                        <ToolbarSpacer/>
+                        <Button id="backtoList" icon="sap-icon://edit" tooltip="{i18n>backToWizard}" type="Emphasized" press="._navBackToStep">
+                            <customData>
+                                <core:CustomData key="navBackTo" value="itemsStep"/>
+                            </customData>
+                        </Button>
+                    </Toolbar>
+                </headerToolbar>
+                <content>
+                    <List id="summaryEntryList" items="{cart>/cartItems}" noDataText="{i18n>cartNoData}">
+                        <items>
+                            <ObjectListItem intro="{cart>Quantity} x" icon="{cart>Image}" title="{cart>Maktx}" number="{
+                                parts:[
+                                    {path : 'cart>Netpr'},
+                                    {path : 'cart>Waers'}
+                                ],
+                                type:'sap.ui.model.type.Currency',
+                                formatOptions:{showMeasure: false}
+                            }" numberUnit="{cart>Waers}" class="sapUiNoMargin">
+                                <firstStatus>
+                                    <ObjectStatus text="{cart>Status}" state="{cart>StatusState}"/>
+                                </firstStatus>
+                            </ObjectListItem>
+                        </items>
+                    </List>
+                </content>
+            </Panel>
 
             <f:SimpleForm ariaLabelledBy="totalPriceTitle">
                 <f:toolbar>
@@ -56,16 +48,15 @@
                             id="totalPriceTitle"
                             level="H3"
                             titleStyle="H4" text="총 금액 : " />
-            <!-- <Text text="{paymentCart>/totalPrice} KRW" /> -->
-                    <ObjectNumber number="{
-                        parts:[ 
-                            {path : 'cart>/totalPrice'},
-                            {path : 'cart>/cartItems/0/Waers'}
-                        ],
-                        type:'sap.ui.model.type.Currency',
-                        formatOptions:{showMeasure: false}
-                    }"
-                    numberUnit="{cart>/cartItems/0/Waers}" class="sapUiNoMargin"/>
+                        <ObjectNumber number="{
+                            parts:[ 
+                                {path : 'cart>/totalPrice'},
+                                {path : 'cart>/cartItems/0/Waers'}
+                            ],
+                            type:'sap.ui.model.type.Currency',
+                            formatOptions:{showMeasure: false}
+                        }"
+                        numberUnit="{cart>/cartItems/0/Waers}" class="sapUiNoMargin"/>
                     </Toolbar>
                 </f:toolbar>
             </f:SimpleForm>
@@ -82,63 +73,77 @@
                             level="H2"
                             titleStyle="H4"/>
                         <ToolbarSpacer/>
-                        <Button
-                            id="backToPaymentType"
-                            icon="sap-icon://edit"
-                            tooltip="{i18n>backToWizard}"
-                            type="Emphasized"
-                            press="._navBackToStep">
-                            <customData>
-                                <core:CustomData key="navBackTo" value="paymentTypeStep"/>
-                            </customData>
-                        </Button>
+                        
                     </Toolbar>
                 </f:toolbar>
                 <f:content>
                     <Label text="{i18n>checkoutSummaryPaymentHeader}"/>
-                    <Text text="{cart>/selectedPaymentType}"/>
+                    <Text text="{cart>/summaryData/selectedPaymentType}"/>
                 </f:content>
             </f:SimpleForm>
 
+            <f:SimpleForm
+                visible="{= ${cart>/summaryData/selectedPaymentType}==='Card' ? true : false}"
+                editable="false"
+                layout="ResponsiveGridLayout"
+                ariaLabelledBy="creditCardPaymentTitle">
+                <f:toolbar>
+                    <Toolbar id="toolbarCreditCard">
+                        <Title
+                            id="creditCardPaymentTitle"
+                            text="{i18n>checkoutSummaryTitle3cc}"
+                            level="H2"
+                            titleStyle="H4"/>
+                        <ToolbarSpacer/>
+                        
+                    </Toolbar>
+                </f:toolbar>
+                <f:content>
+                    <Label text="{i18n>checkoutCreditCardName}"/>
+                    <Text text="{cart>/summaryData/cardOwner}"/>
+                    <Label text="{i18n>checkoutCreditCardCardNo}"/>
+                    <Text text="{cart>/summaryData/cardNumber}"/>
+                    <Label text="{i18n>checkoutCreditCardCode}"/>
+                    <Text text="{cart>/summaryData/cvc}"/>
+                    <Label text="{i18n>checkoutCreditCardExpiration}"/>
+                    <Text text="{cart>/summaryData/expiryDate}"/>
+                </f:content>
+            </f:SimpleForm>
 
-
-		</content>
-		<footer>
-			<Bar id="summaryFooterBar">
-				<contentRight>
-					<Button id="submitOrder" type="Accept" text="{i18n>checkoutSummarySubmit}" press=".handleWizardSubmit"></Button>
-					<Button id="cancelOrder" type="Reject" text="{i18n>checkoutSummaryCancel}" press=".handleWizardCancel"></Button>
-				</contentRight>
-			</Bar>
-		</footer>
-	</Page>
-
-
-
-    <!-- <Page title="Order Summary">
-        <content>
-            <VBox>
-                <Text text="Items" />
-                <List id="summaryList" items="{
-                    path: 'cart>/cartItems',
-                    templateShareable: true
-                }">
-                    <StandardListItem
-                        title="{cart>Maktx}"
-                        description="{cart>Netpr} EUR"
-                        info="{cart>Quantity} pcs"
-                        type="Inactive" />
-                </List>
-                <Text text="Payment Type: {globalModel>/summaryData/paymentType}" />
-                <Text text="Bank Transfer Details:" />
-                <Text text="Beneficiary: {globalModel>/summaryData/bankDetails/beneficiaryName}" />
-                <Text text="Bank: {globalModel>/summaryData/bankDetails/bankName}" />
-                <Text text="Account Number: {globalModel>/summaryData/bankDetails/accountNumber}" />
-                <Text text="Invoice Address:" />
-                <Text text="Address: {globalModel>/summaryData/invoiceAddress/address}" />
-                <Text text="City: {globalModel>/summaryData/invoiceAddress/city}" />
-                <Text text="Total: {globalModel>/summaryData/total} EUR" />
-            </VBox>
+            <f:SimpleForm
+                editable="false"
+                layout="ResponsiveGridLayout">
+                <f:toolbar>
+                    <Toolbar id="toolbar5ShippingAddress">
+                        <Title
+                            id="shippingAddressTitle1"
+                            text="{i18n>checkoutDeliveryAddressTitle}"
+                            level="H2"
+                            titleStyle="H4"/>
+                        <ToolbarSpacer/>
+                        
+                    </Toolbar>
+                </f:toolbar>
+                <f:content>
+                    <Label text="{i18n>checkoutDeliveryAddressAddress}"/>
+                    <Text text="{cart>/summaryData/deliveryAddress/address}"/>
+                    <Label text="{i18n>checkoutDeliveryAddressCity}"/>
+                    <Text text="{cart>/summaryData/deliveryAddress/detailAddress}"/>
+                    <Label text="{i18n>checkoutDeliveryAddressZip}"/>
+                    <Text text="{cart>/summaryData/deliveryAddress/postcode}"/>
+                    <Label text="{i18n>checkoutDeliveryAddressCountry}"/>
+                    <Text text="{cart>/summaryData/deliveryAddress/extraAddress}"/>
+                </f:content>
+            </f:SimpleForm>
         </content>
-    </Page> -->
+        <footer>
+            <Bar id="summaryFooterBar">
+                <contentRight>
+                    <Button id="submitOrder" type="Accept" text="{i18n>checkoutSummarySubmit}" press=".handleWizardSubmit"></Button>
+                    <Button id="cancelOrder" type="Reject" text="{i18n>checkoutSummaryCancel}" press=".handleWizardCancel"></Button>
+                </contentRight>
+            </Bar>
+        </footer>
+    </Page>
 </mvc:View>
+

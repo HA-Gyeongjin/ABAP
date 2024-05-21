@@ -26,6 +26,7 @@ sap.ui.define([
                 editMode: false,
                 totalPrice: 0
             });
+            oCartModel.setDefaultBindingMode("TwoWay");
             return oCartModel;
         }
     };

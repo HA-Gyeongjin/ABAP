@@ -75,6 +75,12 @@
         "settings": {
           
         }
+      },
+      "globalModel": {
+        "type": "sap.ui.model.json.JSONModel",
+        "settings": {
+
+        }
       }
     },
     "resources": {
@@ -103,11 +109,19 @@
             "TargetHome"
           ]
         },
+
         {
           "name": "RoutePayment",
           "pattern": "payment",
           "target": "TargetPayment"
+        },
+
+        {
+          "pattern": "summary",
+          "name": "RouteSummary",
+          "target": "TargetSummary"
         }
+
       ],
       "targets": {
         "TargetHome": {
@@ -118,9 +132,16 @@
           "viewId": "Home",
           "viewName": "Home"
         },
+
         "TargetPayment": {
           "viewName": "Payment",
           "viewId": "Payment",
+          "viewLevel": 2
+        },
+        
+        "TargetSummary": {
+          "viewId": "Summary",
+          "viewName": "Summary",
           "viewLevel": 2
         }
       }

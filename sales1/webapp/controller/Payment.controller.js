@@ -14,13 +14,19 @@ sap.ui.define([
 
             
             var oCartModel = this.getOwnerComponent().getModel("cart");
-            this.getView().setModel(oCartModel, "paymentCart");
+            // this.getView().setModel(oCartModel, "paymentCart");
 
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
             var oRoute = oRouter.getRoute("RoutePayment");
 
             if (oRoute) {
                 oRoute.attachPatternMatched(this._onPatternMatched, this);
+            }
+
+            // Summary route
+            var oSummaryRoute = oRouter.getRoute("RouteSummary");
+            if (oSummaryRoute) {
+                oSummaryRoute.attachPatternMatched(this._onSummaryPatternMatched, this);
             }
             
             // 결제 관련 모델 초기화
@@ -33,7 +39,23 @@ sap.ui.define([
             oCartModel.setProperty("/selectedPaymentType", "");
             oCartModel.setProperty("/paymentTypeSelected", false);
             oCartModel.setProperty("/showCardInfo", false);
+            oCartModel.setProperty("/isCardInfoValid", false); // Initialize validation state
 
+            // Daum Postcode API 스크립트 로드
+            this._loadDaumPostcodeScript().then(() => {
+                console.log("Daum Postcode script loaded successfully");
+            }).catch((error) => {
+                console.error("Failed to load Daum Postcode script:", error);
+            });
+
+        },
+
+        // New method to handle summary route pattern matched
+        _onSummaryPatternMatched: function (oEvent) {
+            var sSummaryData = oEvent.getParameter("arguments").summaryData;
+            var oSummaryData = JSON.parse(decodeURIComponent(sSummaryData));
+            var oCartModel = this.getOwnerComponent().getModel("cart");
+            oCartModel.setProperty("/summaryData", oSummaryData);
         },
 
         _onPatternMatched: function (oEvent) {
@@ -48,69 +70,42 @@ sap.ui.define([
         },
 
         onPaymentTypeSelect: function (oEvent) {
-            var oCartModel = this.getView().getModel("paymentCart");
-            var sSelectedKey = oEvent.getSource().getSelectedButton().getKey();
+            var oCartModel = this.getView().getModel("cart");
+            var sSelectedKey = oEvent.getParameter("button").data("paymentType");
             oCartModel.setProperty("/selectedPaymentType", sSelectedKey);
             oCartModel.setProperty("/paymentTypeSelected", true);
             oCartModel.setProperty("/showCardInfo", sSelectedKey === "Card");
         },
 
         onNextStep: function () {
-            var oCartModel = this.getView().getModel("paymentCart");
+            var oCartModel = this.getView().getModel("cart");
             var sSelectedPaymentType = oCartModel.getProperty("/selectedPaymentType");
+            var oWizard = this.byId("paymentWizard");
 
-            if (sSelectedPaymentType === "Card" || sSelectedPaymentType === "KakaoPay") {
-                var oWizard = this.byId("paymentWizard");
-                oWizard.nextStep();
-            } else {
-                var oWizard = this.byId("paymentWizard");
-                oWizard.nextStep();
-            }
-        },
-
-        onComplete: function () {
-            var oCartModel = this.getView().getModel("paymentCart");
-            var iSelectedIndex = oCartModel.getProperty("/selectedIndex");
-
-            if (iSelectedIndex === 1) { // 1 corresponds to KakaoPay
-                this._initiateKakaoPay();
-            } else if (iSelectedIndex === 0) { // 0 corresponds to Card
-                MessageToast.show("Payment Complete");
-                // Add your logic for completing the payment process for card payment
-            } else {
-                MessageToast.show("Please select a payment method.");
-            }
-        },
-
-        _initiateKakaoPay: function () {
-            var oCartModel = this.getView().getModel("paymentCart");
-            var aCartItems = oCartModel.getProperty("/cartItems");
-
-            var oPayload = {
-                totalAmount: oCartModel.getProperty("/totalPrice")
-            };
-
-            $.ajax({
-                url: "http://localhost:3000/kakao-pay",
-                method: "POST",
-                contentType: "application/json",
-                data: JSON.stringify(oPayload),
-                success: function (response) {
-                    if (response.next_redirect_pc_url) {
-                        window.location.href = response.next_redirect_pc_url;
-                    } else {
-                        MessageToast.show("Failed to initiate KakaoPay");
-                    }
-                },
-                error: function () {
-                    MessageToast.show("Error during KakaoPay initiation");
+            if (sSelectedPaymentType === "KakaoPay") {
+                // Skip to the idAddress step
+                var oSteps = oWizard.getSteps();
+                for (var i = oWizard.getProgress(); i < oSteps.length; i++) {
+                    oWizard.nextStep();
                 }
-            });
+            } else {
+                oWizard.nextStep();
+            }
         },
 
         onNavBack: function () {
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
             oRouter.navTo("RouteHome");
+        },
+
+        validateCardInfo: function () {
+            var oView = this.getView();
+            var bValid = oView.byId("creditCardHolderName").getValueState() === "None" && oView.byId("creditCardHolderName").getValue().trim() !== "" &&
+                         oView.byId("creditCardNumber").getValueState() === "None" && oView.byId("creditCardNumber").getValue().trim() !== "" &&
+                         oView.byId("creditCardSecurityNumber").getValueState() === "None" && oView.byId("creditCardSecurityNumber").getValue().trim() !== "" &&
+                         oView.byId("creditCardExpirationDate").getValueState() === "None" && oView.byId("creditCardExpirationDate").getValue().trim() !== "";
+        
+            this.getView().getModel("paymentCart").setProperty("/isCardInfoValid", bValid);
         },
 
         checkCardHolderName: function(oEvent) {
@@ -122,6 +117,7 @@ sap.ui.define([
             } else {
                 oInput.setValueState("Error");
             }
+            this.validateCardInfo();
         },
 
         checkCardNumber: function(oEvent) {
@@ -136,6 +132,7 @@ sap.ui.define([
                 oInput.setValueState("Error");
                 oInput.setValueStateText("유효한 카드번호를 입력해주세요.");
             }
+            this.validateCardInfo();
         },
 
         checkSecurityCode: function(oEvent) {
@@ -150,6 +147,7 @@ sap.ui.define([
                 oInput.setValueState("Error");
                 oInput.setValueStateText("3자리의 숫자만 입력해주세요.");
             }
+            this.validateCardInfo();
         },
 
         checkExpirationDate: function(oEvent) {
@@ -177,7 +175,122 @@ sap.ui.define([
             } else {
                 oInput.setValueState("None");
             }
-        }
+
+            this.validateCardInfo();
+        },
+
+        _loadDaumPostcodeScript: function () {
+            return new Promise((resolve, reject) => {
+                if (typeof daum !== "undefined") {
+                    // 이미 로드된 경우 바로 resolve
+                    resolve();
+                    return;
+                }
+                var script = document.createElement("script");
+                script.src = "//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
+                script.onload = () => {
+                    console.log("Daum Postcode script loaded");
+                    resolve();
+                };
+                script.onerror = () => {
+                    console.error("Failed to load Daum Postcode script");
+                    reject(new Error("Failed to load Daum Postcode script"));
+                };
+                document.head.appendChild(script);
+            });
+        },
+
+        onFindAddress: function () {
+            console.log("onFindAddress 호출됨");
+            if (typeof daum === "undefined") {
+                console.error("Daum Postcode API 스크립트가 로드되지 않았습니다.");
+                return;
+            }
+            new daum.Postcode({
+                oncomplete: function(data) {
+                    console.log("API 호출 후 데이터 반환: ", data);
+                    var addr = ''; // 주소 변수
+                    var extraAddr = ''; // 참고항목 변수
+
+                    if (data.userSelectedType === 'R') { // 도로명 주소
+                        addr = data.roadAddress;
+                    } else { // 지번 주소
+                        addr = data.jibunAddress;
+                    }
+
+                    if(data.userSelectedType === 'R'){
+                        if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                            extraAddr += data.bname;
+                        }
+                        if(data.buildingName !== '' && data.apartment === 'Y'){
+                            extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                        }
+                        if(extraAddr !== ''){
+                            extraAddr = ' (' + extraAddr + ')';
+                        }
+                        this.getView().byId("sample6_extraAddress").setValue(extraAddr);
+                    } else {
+                        this.getView().byId("sample6_extraAddress").setValue('');
+                    }
+
+                    this.getView().byId('sample6_postcode').setValue(data.zonecode);
+                    this.getView().byId("sample6_address").setValue(addr);
+                    this.getView().byId("sample6_detailAddress").focus();
+                }.bind(this)
+            }).open();
+        },
+
+        onCheck: function () {
+            var oCartModel = this.getView().getModel("cart");
+            // var oGlobalModel = this.getView().getModel("globalModel");
+            var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+            
+            var oSummaryData = {
+                items: oCartModel.getProperty("/cartItems"),
+                paymentType: oCartModel.getProperty("/selectedPaymentType"),
+                bankDetails: {
+                    beneficiaryName: "Singapore Hardware e-Commerce LTD",
+                    bankName: "CITY BANK, SINGAPORE BRANCH",
+                    accountNumber: "06110702027218"
+                },
+                invoiceAddress: {
+                    address: "sdasasd",
+                    city: "sesadsa"
+                },
+                total: this._calculateTotal(oCartModel.getProperty("/cartItems"))
+            };
+
+            // 글로벌 모델에 데이터 설정
+            // oGlobalModel.setProperty("/summaryData", oSummaryData);
+
+            // 페이지 이동
+            oRouter.navTo("RouteSummary");
+        },
+        
+        _calculateTotal: function (aCartItems) {
+            return aCartItems.reduce(function (acc, item) {
+                return acc + (item.price * item.quantity);
+            }, 0);
+        },
+
+        onInputChange: function () {
+            var bAllFilled = this._checkAllInputFilled();
+            this.getView().byId("checkButton").setEnabled(bAllFilled);
+        },
+
+        _checkAllInputFilled: function () {
+            var aInputIds = [
+                "sample6_postcode",
+                "sample6_address",
+                "sample6_detailAddress",
+                "sample6_extraAddress"
+            ];
+
+            return aInputIds.every(function (sId) {
+                var oInput = this.getView().byId(sId);
+                return oInput && oInput.getValue().trim() !== "";
+            }, this);
+        },
 
     });
 });

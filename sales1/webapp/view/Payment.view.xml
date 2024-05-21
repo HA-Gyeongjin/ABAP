@@ -22,26 +22,26 @@
     <Wizard id="paymentWizard" showNextButton="false">
         <WizardStep title="Items" >
             <VBox>
-                <List id="itemsList" items="{paymentCart>/cartItems}">
+                <List id="itemsList" items="{cart>/cartItems}">
                     <CustomListItem>
                         <HBox justifyContent="SpaceBetween" width="100%">
                             <HBox>
-                            <Text text="{paymentCart>Quantity} x" />
-                            <Image src="{paymentCart>Image}" width="50px" height="50px"/>
+                            <Text text="{cart>Quantity} x" />
+                            <Image src="{cart>Image}" width="50px" height="50px"/>
                             <VBox>
-                                <Text text="{paymentCart>Maktx}" />
+                                <Text text="{cart>Maktx}" />
                             </VBox>
                             </HBox>
                             <VBox alignItems="End">
                             <ObjectNumber number="{
                                 parts:[
-                                    {path : 'paymentCart>Netpr'},
-                                    {path : 'paymentCart>Waers'}
+                                    {path : 'cart>Netpr'},
+                                    {path : 'cart>Waers'}
                                     ],
                                     type:'sap.ui.model.type.Currency',
                                     formatOptions:{showMeasure: false}
                                 }"
-                                numberUnit="{paymentCart>Waers}" class="sapUiNoMargin"/>
+                                numberUnit="{cart>Waers}" class="sapUiNoMargin"/>
                             </VBox>
                         </HBox>
                     </CustomListItem>
@@ -51,30 +51,34 @@
                     <!-- <Text text="{paymentCart>/totalPrice} KRW" /> -->
                     <ObjectNumber number="{
                         parts:[ 
-                            {path : 'paymentCart>/totalPrice'},
-                            {path : 'paymentCart>/cartItems/0/Waers'}
+                            {path : 'cart>/totalPrice'},
+                            {path : 'cart>/cartItems/0/Waers'}
                         ],
                         type:'sap.ui.model.type.Currency',
                         formatOptions:{showMeasure: false}
                     }"
-                    numberUnit="{paymentCart>/cartItems/0/Waers}" class="sapUiNoMargin"/>
+                    numberUnit="{cart>/cartItems/0/Waers}" class="sapUiNoMargin"/>
                 </HBox>
                 <Button text="단계 2" press="onNextStep" />
             </VBox>
         </WizardStep>
-        <WizardStep id="paymentTypeStep" title="Payment Type">
+        <WizardStep id="paymentTypeStep" title="Payment Type" >
             <VBox>
                 <Text text="Please select your payment method:" />
-                <RadioButtonGroup
-            id="paymentTypeGroup"
-            columns="2"
-            selectedIndex="{paymentCart>/selectedIndex}"
-			select="onPaymentTypeSelect" >
+                <SegmentedButton select=".onPaymentTypeSelect">
                     <buttons>
-                        <RadioButton text="Card" />
-                        <RadioButton text="KakaoPay" />
+                        <Button text="Card">
+                            <customData>
+                                <core:CustomData key="paymentType" value="Card"/>
+                            </customData>
+                        </Button>
+                        <Button text="KakaoPay">
+                            <customData>
+                                <core:CustomData key="paymentType" value="KakaoPay"/>
+                            </customData>
+                        </Button>
                     </buttons>
-                </RadioButtonGroup>
+                </SegmentedButton>
             </VBox>
             <Button text="단계 3" press="onNextStep" />
         </WizardStep>
@@ -85,15 +89,14 @@
 			nextStep="invoiceStep"
 			activate=".onCheckStepActivation"
 			icon="sap-icon://credit-card"
-			validated="false"
-			visible="{paymentCart>/showCardInfo}">
+			>
 		<f:SimpleForm
 			editable="true"
 			layout="ResponsiveGridLayout">
 			<Label
 				labelFor="creditCardHolderName"
 				text="{i18n>checkoutCreditCardName}"
-				required="true">
+				>
 				<layoutData>
 					<l:GridData span="XL4 L4 M4 S12"/>
 				</layoutData>
@@ -110,7 +113,8 @@
 					}	
 				}"
 				valueStateText="이름은 최소 2자리 이상이어야 하며, 숫자나 특수문자를 포함할 수 없습니다."
-				change="checkCardHolderName">
+				change="checkCardHolderName"
+				required="true">
 				<layoutData>
 					<l:GridData span="XL8 L8 M8 S12"/>
 				</layoutData>
@@ -118,7 +122,7 @@
 			<Label
 				text="{i18n>checkoutCreditCardCardNo}"
 				labelFor="creditCardNumber"
-				required="true">
+				>
 				<layoutData>
 					<l:GridData span="XL4 L4 M4 S12"/>
 				</layoutData>
@@ -136,7 +140,8 @@
 						minLength: 19
 					}
 				}"
-				change="checkCardNumber">
+				change="checkCardNumber"
+				required="true">
 				<rules>
 					<MaskInputRule
 						maskFormatSymbol="C"
@@ -149,7 +154,7 @@
 			<Label
 				text="{i18n>checkoutCreditCardCode}"
 				labelFor="creditCardSecurityNumber"
-				required="true">
+				>
 				<layoutData>
 					<l:GridData span="XL4 L4 M4 S12"/>
 				</layoutData>
@@ -167,7 +172,8 @@
 						search: '^[0-9]+$'
 					}
 				}"
-				change="checkSecurityCode">
+				change="checkSecurityCode"
+				required="true">
 				<rules>
 					<MaskInputRule
 						maskFormatSymbol="C"
@@ -201,13 +207,19 @@
 				</layoutData>
 			</DatePicker>
 		</f:SimpleForm>
+		<Button text="단계 4" press="onNextStep" enabled="{paymentCart>/isCardInfoValid}"/>
 	</WizardStep>
 
-						<!-- <Button text="Submit" press="onSubmit" /> -->
             
-        <WizardStep title="Review">
-            <!-- Your content for review -->
-            <Button text="Complete" press="onComplete" />
+        <WizardStep title="배송지 입력" id="idAddress">
+            <VBox>
+                <Input id="sample6_postcode" placeholder="우편번호" liveChange=".onInputChange"/>
+                <Button text="우편번호 찾기" press=".onFindAddress" />
+				<Input id="sample6_address" placeholder="주소" liveChange=".onInputChange"/>
+				<Input id="sample6_detailAddress" placeholder="상세주소" liveChange=".onInputChange"/>
+				<Input id="sample6_extraAddress" placeholder="참고항목" liveChange=".onInputChange"/>
+            </VBox>
+            <Button id="checkButton" text="주문확인" press=".onCheck" enabled="false" />
         </WizardStep>
     </Wizard>
 </content>

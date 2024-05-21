@@ -1,0 +1,144 @@
+<mvc:View
+    controllerName="sync.zec.sales1.controller.Summary"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    displayBlock="true"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form">
+
+    <Page id="summaryPage" backgroundDesign="Solid" showHeader="false" title="Order Summary">
+		<landmarkInfo>
+			<PageAccessibleLandmarkInfo
+				rootRole="Region" rootLabel="{i18n>Checkout_rootLabel}"
+				contentRole="Main" contentLabel="{i18n>Checkout_summaryContentLabel}"
+				footerRole="Banner" footerLabel="{i18n>Checkout_footerLabel}"/>
+		</landmarkInfo>
+		<content>
+			<Panel>
+				<headerToolbar>
+					<Toolbar id="toolbarProductList">
+						<Title id="checkoutItems" text="{i18n>checkoutSummaryTitle1}" level="H2" titleStyle="H4"/>
+						<ToolbarSpacer/>
+						<Button id="backtoList" icon="sap-icon://edit" tooltip="{i18n>backToWizard}" type="Emphasized" press="._navBackToStep">
+							<customData>
+								<core:CustomData key="navBackTo" value="contentsStep"/>
+							</customData>
+						</Button>
+					</Toolbar>
+				</headerToolbar>
+				<content>
+					<List id="summaryEntryList" items="{cart>/cartItems}" noDataText="{i18n>cartNoData}">
+						<items>
+							<ObjectListItem intro="{cart>Quantity} x" icon="{cart>Image}" title="{cart>Maktx}" number="{
+								parts:[
+									{path : 'cart>Netpr'},
+									{path : 'cart>Waers'}
+								],
+								type:'sap.ui.model.type.Currency',
+								formatOptions:{showMeasure: false}
+							}" numberUnit="{cart>Waers}" class="sapUiNoMargin">
+								<firstStatus>
+									<ObjectStatus text="{cart>Status}" state="{cart>StatusState}"/>
+								</firstStatus>
+							</ObjectListItem>
+						</items>
+					</List>
+				</content>
+			</Panel>
+
+			<!-- Add other SimpleForms and content as needed -->
+
+            <f:SimpleForm ariaLabelledBy="totalPriceTitle">
+                <f:toolbar>
+                    <Toolbar id="toolbarTotalPrice">
+                        <ToolbarSpacer/>
+                            <Title
+                            id="totalPriceTitle"
+                            level="H3"
+                            titleStyle="H4" text="총 금액 : " />
+            <!-- <Text text="{paymentCart>/totalPrice} KRW" /> -->
+                    <ObjectNumber number="{
+                        parts:[ 
+                            {path : 'cart>/totalPrice'},
+                            {path : 'cart>/cartItems/0/Waers'}
+                        ],
+                        type:'sap.ui.model.type.Currency',
+                        formatOptions:{showMeasure: false}
+                    }"
+                    numberUnit="{cart>/cartItems/0/Waers}" class="sapUiNoMargin"/>
+                    </Toolbar>
+                </f:toolbar>
+            </f:SimpleForm>
+
+            <f:SimpleForm
+                editable="false"
+                layout="ResponsiveGridLayout"
+                ariaLabelledBy="toolbarPaymentTitle">
+                <f:toolbar>
+                    <Toolbar id="toolbarPayment">
+                        <Title
+                            id="toolbarPaymentTitle"
+                            text="{i18n>checkoutSummaryTitle2}"
+                            level="H2"
+                            titleStyle="H4"/>
+                        <ToolbarSpacer/>
+                        <Button
+                            id="backToPaymentType"
+                            icon="sap-icon://edit"
+                            tooltip="{i18n>backToWizard}"
+                            type="Emphasized"
+                            press="._navBackToStep">
+                            <customData>
+                                <core:CustomData key="navBackTo" value="paymentTypeStep"/>
+                            </customData>
+                        </Button>
+                    </Toolbar>
+                </f:toolbar>
+                <f:content>
+                    <Label text="{i18n>checkoutSummaryPaymentHeader}"/>
+                    <Text text="{cart>/selectedPaymentType}"/>
+                </f:content>
+            </f:SimpleForm>
+
+
+
+		</content>
+		<footer>
+			<Bar id="summaryFooterBar">
+				<contentRight>
+					<Button id="submitOrder" type="Accept" text="{i18n>checkoutSummarySubmit}" press=".handleWizardSubmit"></Button>
+					<Button id="cancelOrder" type="Reject" text="{i18n>checkoutSummaryCancel}" press=".handleWizardCancel"></Button>
+				</contentRight>
+			</Bar>
+		</footer>
+	</Page>
+
+
+
+    <!-- <Page title="Order Summary">
+        <content>
+            <VBox>
+                <Text text="Items" />
+                <List id="summaryList" items="{
+                    path: 'cart>/cartItems',
+                    templateShareable: true
+                }">
+                    <StandardListItem
+                        title="{cart>Maktx}"
+                        description="{cart>Netpr} EUR"
+                        info="{cart>Quantity} pcs"
+                        type="Inactive" />
+                </List>
+                <Text text="Payment Type: {globalModel>/summaryData/paymentType}" />
+                <Text text="Bank Transfer Details:" />
+                <Text text="Beneficiary: {globalModel>/summaryData/bankDetails/beneficiaryName}" />
+                <Text text="Bank: {globalModel>/summaryData/bankDetails/bankName}" />
+                <Text text="Account Number: {globalModel>/summaryData/bankDetails/accountNumber}" />
+                <Text text="Invoice Address:" />
+                <Text text="Address: {globalModel>/summaryData/invoiceAddress/address}" />
+                <Text text="City: {globalModel>/summaryData/invoiceAddress/city}" />
+                <Text text="Total: {globalModel>/summaryData/total} EUR" />
+            </VBox>
+        </content>
+    </Page> -->
+</mvc:View>

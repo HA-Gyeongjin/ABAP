@@ -18,16 +18,16 @@ sap.ui.define([
                 var oModel = new JSONModel(Device);
                 oModel.setDefaultBindingMode("OneWay");
                 return oModel;
-        },
-        createCartModel: function () {
-            var oCartModel = new JSONModel({
-                cartItems: [],
-                selectedProduct: {},
-                editMode: false,
-                totalPrice: 0
-            });
-            oCartModel.setDefaultBindingMode("TwoWay");
-            return oCartModel;
-        }
+            },
+            createCartModel: function () {
+                var oCartModel = new JSONModel({
+                    cartItems: [],
+                    selectedProduct: {},
+                    editMode: false,
+                    totalPrice: 0
+                });
+                oCartModel.setDefaultBindingMode("TwoWay");
+                return oCartModel;
+            }
     };
 });

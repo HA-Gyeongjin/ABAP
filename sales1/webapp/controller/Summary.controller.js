@@ -89,9 +89,9 @@ sap.ui.define([
         _callKakaoPayAPI: function () {
             var oCartModel = this.getView().getModel("cart");
             var oSummaryData = oCartModel.getProperty("/summaryData");
-
+        
             console.log("Calling KakaoPay API with data:", oSummaryData);
-
+        
             $.ajax({
                 url: "http://localhost:3000/pay",
                 method: "POST",

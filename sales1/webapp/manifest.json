@@ -153,8 +153,7 @@
 
         "TargetSuccess": {
           "viewId": "Success",
-          "viewName": "Success",
-          "viewLevel": 1
+          "viewName": "Success"
         }
       }
     },

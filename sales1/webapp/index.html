@@ -21,7 +21,20 @@
         data-sap-ui-compatVersion="edge"
         data-sap-ui-async="true"
         data-sap-ui-frameOptions="trusted"
-    ></script>
+    >
+    </script>
+    
+    <script>
+        sap.ui.getCore().attachInit(function () {
+            new sap.m.Shell({
+                app: new sap.ui.core.ComponentContainer({
+                    height: "100%",
+                    name: "sync.zec.sales1"
+                })
+            }).placeAt("content");
+        });
+    </script>
+
 </head>
 <body class="sapUiBody sapUiSizeCompact" id="content">
     <div

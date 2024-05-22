@@ -1,6 +1,8 @@
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
+const path = require('path');
+
 const app = express();
 app.use(express.json());
 
@@ -8,6 +10,9 @@ app.use(express.json());
 app.use(cors());
 
 const YOUR_ADMIN_KEY = '08b7e210754118e01e7f8cd100c48fc7'; // 카카오페이 Admin Key
+
+// 정적 파일을 제공할 디렉터리 설정
+app.use(express.static(path.join(__dirname, 'webapp')));
 
 app.post('/pay', async (req, res) => {
     const { amount, item_name } = req.body;
@@ -25,9 +30,9 @@ app.post('/pay', async (req, res) => {
             total_amount: amount,
             vat_amount: vat_amount,
             tax_free_amount: 0,
-            approval_url: 'http://localhost:3000/approval', // 등록된 도메인과 일치해야 합니다.
-            cancel_url: 'http://localhost:3000/cancel', // 등록된 도메인과 일치해야 합니다.
-            fail_url: 'http://localhost:3000/fail', // 등록된 도메인과 일치해야 합니다.
+            approval_url: 'http://localhost:3000/approval', // 변경된 포트 번호 사용
+            cancel_url: 'http://localhost:3000/cancel', // 변경된 포트 번호 사용
+            fail_url: 'http://localhost:3000/fail', // 변경된 포트 번호 사용
         }, {
             headers: {
                 Authorization: `KakaoAK ${YOUR_ADMIN_KEY}`,
@@ -48,22 +53,23 @@ app.post('/pay', async (req, res) => {
     }
 });
 
-// 승인 핸들러 추가
+// 승인 핸들러 수정
 app.get('/approval', (req, res) => {
     console.log('Payment approved');
-    res.send('Payment approved');
+    res.redirect('http://localhost:8080/test/flpSandbox.html?sap-client=100&sap-ui-xx-viewCache=false#synczecsales1-display&/success'); // 변경된 포트 번호 사용
 });
 
 app.get('/cancel', (req, res) => {
     console.log('Payment cancelled');
-    res.send('Payment cancelled');
+    res.redirect('http://localhost:8080/test/flpSandbox.html?sap-client=100&sap-ui-xx-viewCache=false#synczecsales1-display&/');
 });
 
 app.get('/fail', (req, res) => {
     console.log('Payment failed');
-    res.send('Payment failed');
+    res.redirect('http://localhost:8080/test/flpSandbox.html?sap-client=100&sap-ui-xx-viewCache=false#synczecsales1-display&/fail');
 });
 
-app.listen(3000, () => {
-    console.log('Server is running on port 3000');
+const PORT = 3000; // 원하는 포트 번호로 변경
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });

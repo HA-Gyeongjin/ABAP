@@ -87,6 +87,7 @@ sap.ui.define([
             });
         },
 
+<<<<<<< HEAD
         _prepareSummaryData: function (oCartModel) {
             var oCartItems = oCartModel.getProperty("/cartItems");
 
@@ -112,6 +113,11 @@ sap.ui.define([
         _callKakaoPayAPI: function (oSummaryData) {
             // var oCartModel = this.getView().getModel("cart");
             // var oSummaryData = oCartModel.getProperty("/summaryData");
+=======
+        _callKakaoPayAPI: function () {
+            var oCartModel = this.getView().getModel("cart");
+            var oSummaryData = oCartModel.getProperty("/summaryData");
+>>>>>>> 45d139682c93c543d084270a457b4a802ea528f4
         
             console.log("Calling KakaoPay API with data:", oSummaryData);
         

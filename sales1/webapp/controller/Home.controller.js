@@ -53,9 +53,9 @@ sap.ui.define([
             });
 
             if (oExistingItem) {
-                oExistingItem.Quantity += 1;
+                oExistingItem.Quantity = (parseFloat(oExistingItem.Quantity) + 1).toFixed(2); // 수량을 소수점 두 자리로 변환
             } else {
-                oSelectedProduct.Quantity = 1;
+                oSelectedProduct.Quantity = "1.00"; // 초기 수량을 소수점 두 자리로 설정
                 oSelectedProduct.Image = "../images/" + oSelectedProduct.Maktx + ".jpg"; // 이미지 경로 추가
                 aCartItems.push(oSelectedProduct);
             }
@@ -71,7 +71,7 @@ sap.ui.define([
             var fTotalPrice = aCartItems.reduce(function (fSum, oItem) {
                 return fSum + (oItem.Netpr * oItem.Quantity);
             }, 0);
-            oCartModel.setProperty("/totalPrice", fTotalPrice);
+            oCartModel.setProperty("/totalPrice", fTotalPrice.toFixed(2)); // 총 금액을 소수점 두 자리로 설정
         },
 
         onSelectProduct: function (oEvent) {

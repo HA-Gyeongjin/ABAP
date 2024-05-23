@@ -1,0 +1,25 @@
+# yaml-language-server: $schema=https://sap.github.io/ui5-tooling/schema/ui5.yaml.json
+
+specVersion: "3.1"
+metadata:
+  name: sync.e25.deploytest
+type: application
+builder:
+  resources:
+    excludes:
+      - /test/**
+      - /localService/**
+  customTasks:
+    - name: deploy-to-abap
+      afterTask: generateCachebusterInfo
+      configuration:
+        target:
+          url: http://210.16.199.140:8001
+          client: "100"
+        app:
+          name: YE25_UI5_TEST
+          description: Deploy 연습
+          package: ZCL5_25
+          transport: KYSK903497
+        exclude:
+          - /test/

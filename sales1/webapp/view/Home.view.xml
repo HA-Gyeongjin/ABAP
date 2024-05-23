@@ -86,11 +86,11 @@
 
         <f:endColumnPages>
             <!-- 장바구니 페이지 -->
-            <Page title="Your Cart">
+            <Page title="{i18n>cartTitle}">
               <customHeader>
                 <Bar>
                     <contentMiddle>
-                        <Title text="Your Cart" level="H3"/>
+                        <Title text="{i18n>cartTitle}" level="H3"/>
                     </contentMiddle>
                     <contentRight>
                         <Button icon="sap-icon://edit" press="onEditCart" tooltip="Edit" visible="{= !${cart>/editMode} }"/>
@@ -108,7 +108,7 @@
                             <CustomListItem >
                                 <HBox justifyContent="SpaceBetween" alignItems="Center">
                                   <VBox class="sapUiNoMargin">
-                                    <Text text="{= 'x ' + ${cart>Quantity}}" class="sapUiTinyMarginBottom" />
+                                    <Text text="{= 'x ' + ${path:'cart>Quantity', type: 'sap.ui.model.odata.type.Decimal'}}" class="sapUiTinyMarginBottom" />
                                     <HBox justifyContent="SpaceBetween" width="100%">
                                         <Image src="{cart>Image}" width="50px" height="50px"/>
                                         <VBox>

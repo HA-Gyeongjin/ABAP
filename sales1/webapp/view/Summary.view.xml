@@ -23,7 +23,8 @@
                 <content>
                     <List id="summaryEntryList" items="{cart>/cartItems}" noDataText="{i18n>cartNoData}">
                         <items>
-                            <ObjectListItem intro="{cart>Quantity} x" icon="{cart>Image}" title="{cart>Maktx}" number="{
+                            <ObjectListItem intro="{ path: 'cart>Quantity',
+                                                     type: 'sap.ui.model.odata.type.Decimal'} x" icon="{cart>Image}" title="{cart>Maktx}" number="{
                                 parts:[
                                     {path : 'cart>Netpr'},
                                     {path : 'cart>Waers'}
@@ -125,13 +126,13 @@
                     </Toolbar>
                 </f:toolbar>
                 <f:content>
-                    <Label text="{i18n>checkoutDeliveryAddressAddress}"/>
+                    <Label text="{i18n>checkoutDeliveryAddress}"/>
                     <Text text="{cart>/summaryData/deliveryAddress/address}"/>
-                    <Label text="{i18n>checkoutDeliveryAddressCity}"/>
+                    <Label text="{i18n>checkoutDeliveryDetailAddress}"/>
                     <Text text="{cart>/summaryData/deliveryAddress/detailAddress}"/>
-                    <Label text="{i18n>checkoutDeliveryAddressZip}"/>
+                    <Label text="{i18n>checkoutDeliveryPostcode}"/>
                     <Text text="{cart>/summaryData/deliveryAddress/postcode}"/>
-                    <Label text="{i18n>checkoutDeliveryAddressCountry}"/>
+                    <Label text="{i18n>checkoutDeliveryExtraAddress}"/>
                     <Text text="{cart>/summaryData/deliveryAddress/extraAddress}"/>
                 </f:content>
             </f:SimpleForm>

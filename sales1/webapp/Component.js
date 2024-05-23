@@ -5,9 +5,10 @@
 sap.ui.define([
         "sap/ui/core/UIComponent",
         "sap/ui/Device",
-        "sync/zec/sales1/model/models"
+        "sync/zec/sales1/model/models",
+        "sap/ui/model/odata/v2/ODataModel"
     ],
-    function (UIComponent, Device, models) {
+    function (UIComponent, Device, models, ODataModel) {
         "use strict";
 
         return UIComponent.extend("sync.zec.sales1.Component", {
@@ -32,6 +33,10 @@ sap.ui.define([
 
                 // set the cart model
                 this.setModel(models.createCartModel(), "cart");
+                
+                // set the OData model
+                // var oModel = new ODataModel("/sap/opu/odata/sap/ZEC_GW001_SRV/");
+                // this.setModel(oModel);
             }
         });
     }

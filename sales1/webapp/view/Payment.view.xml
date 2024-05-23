@@ -19,14 +19,14 @@
         </headerContent>
 
         <content>
-    <Wizard id="paymentWizard" showNextButton="false">
-        <WizardStep title="Items" id="itemsStep">
+    <Wizard id="paymentWizard" showNextButton="false" >
+        <WizardStep title="{i18n>itemList}" id="itemsStep" icon="sap-icon://list">
             <VBox>
                 <List id="itemsList" items="{cart>/cartItems}">
                     <CustomListItem>
                         <HBox justifyContent="SpaceBetween" width="100%">
                             <HBox>
-                            <Text text="{cart>Quantity} x" />
+                            <Text text="{ path: 'cart>Quantity', type: 'sap.ui.model.odata.type.Decimal'} x" />
                             <Image src="{cart>Image}" width="50px" height="50px"/>
                             <VBox>
                                 <Text text="{cart>Maktx}" />
@@ -62,17 +62,17 @@
                 <Button text="단계 2" press="onNextStep" />
             </VBox>
         </WizardStep>
-        <WizardStep id="paymentTypeStep" title="Payment Type" >
+        <WizardStep id="paymentTypeStep" title="{i18n>paymentType}" >
             <VBox>
-                <Text text="Please select your payment method:" />
+                <Text text="결제방식을 선택해주세요 : " />
                 <SegmentedButton select="onPaymentTypeSelect" >
                     <buttons>
-                        <Button text="Card">
+                        <Button text="카드">
                             <customData>
                                 <core:CustomData key="paymentType" value="Card"/>
                             </customData>
                         </Button>
-                        <Button text="KakaoPay">
+                        <Button text="카카오페이">
                             <customData>
                                 <core:CustomData key="paymentType" value="KakaoPay"/>
                             </customData>

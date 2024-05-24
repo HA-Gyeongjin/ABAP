@@ -37,5 +37,6 @@ sap.ui.define([
                 console.error("No summary data found in localStorage");
             }
         }
+
     });
 });

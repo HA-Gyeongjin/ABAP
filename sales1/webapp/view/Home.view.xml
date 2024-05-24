@@ -3,14 +3,15 @@
     xmlns="sap.m"
     xmlns:f="sap.f"
     controllerName="sync.zec.sales1.controller.Home"
+    xmlns:c="sap.ui.core"
     id="Home">
     
     <f:FlexibleColumnLayout id="flexibleColumnLayout" layout="{appView>/layout}">
-      <f:beginColumnPages>
+        <f:beginColumnPages>
         <!-- 왼쪽 컬럼의 콘텐츠 -->
         <Page title="SSP 건강기능식품">
             <content>
-                <List items="{/ItemSet}" class="sapUiResponsiveMargin" noDataText="No products available">
+                <List items="{/ListItemSet}" class="sapUiResponsiveMargin" noDataText="No products available">
                     <items>
                         
                         <CustomListItem type="Active" press="onSelectProduct">
@@ -35,7 +36,7 @@
                 </List>
             </content>
         </Page>
-    </f:beginColumnPages>
+        </f:beginColumnPages>
 
         <f:midColumnPages>
             <!-- 가운데 컬럼의 콘텐츠 -->
@@ -57,7 +58,7 @@
                     </Bar>
                 </customHeader>
                 <content>
-                  <VBox id="productDetails" class="sapUiSmallMargin">
+                  <VBox id="productDetails" class="sapUiSmallMargin" binding="{cart>/selectedProduct}" >
                     <HBox alignItems="Inherit">
                         <Title text="{cart>/selectedProduct/Maktx}" level="H2" class="productName" />
                         
@@ -71,8 +72,22 @@
                         }"
                         numberUnit="{cart>/selectedProduct/Waers}" class="productPriceMargin" />
                     </HBox>
-                        <Text text="{cart>/selectedProduct/AdditionalText}"/>
-                        <Image src="../images/{cart>/selectedProduct/Maktx}.jpg" width="500px"/>
+                        <Text text="{cart>/cartItems/selectedProduct/AdditionalText}"/>
+                        <Image src="../images/{cart>/selectedProduct/Maktx}.jpg" width="400px"/>
+                            <Select showSecondaryValues="true"  
+                            items="{path: 'toSelect'}"
+                            width="300px"
+                            id="idToSelect"
+                            selectedKey="{cart>/selectedProduct/selectedOption/key}"
+                            change=".onSelectChange">
+                        <c:ListItem key="{Matnr}" 
+                                    text="{Maktx}"
+                                    additionalText="{
+                                        parts: [{ path: 'Netpr' },
+                                                { path: 'Waers' }],
+                                        type:'sap.ui.model.type.Currency'
+                                    }"/>
+                    </Select>
                     </VBox>
                 </content>
                 <footer>
@@ -113,6 +128,8 @@
                                         <Image src="{cart>Image}" width="50px" height="50px"/>
                                         <VBox>
                                             <Text text="{cart>Maktx}" class="sapUiTinyMarginBottom"/>
+                                            <Text text="{cart>selectedOption/text}" class="sapUiTinyMarginBottom"/>
+                                            <Text text="{cart>selectedOption/additionalText}" class="sapUiTinyMarginBottom"/>
                                         </VBox>
                                     </HBox>
                                 </VBox>
@@ -139,7 +156,8 @@
                 <footer>
                   <Toolbar >
                     <Text text="총 금액 : "/>
-                    <ObjectNumber number="{
+                    <ObjectNumber number="{cart>/totalPrice}" numberUnit="KRW" class="sapUiNoMargin"/>
+                    <!-- <ObjectNumber number="{
                       parts:[ 
                           {path : 'cart>/totalPrice'},
                           {path : 'cart>/cartItems/0/Waers'}
@@ -147,7 +165,7 @@
                       type:'sap.ui.model.type.Currency',
                       formatOptions:{showMeasure: false}
                   }"
-                  numberUnit="{cart>/cartItems/0/Waers}" class="sapUiNoMargin"/>  
+                  numberUnit="{cart>/cartItems/0/Waers}" class="sapUiNoMargin"/>   -->
                       <ToolbarSpacer />
                       <Button text="결제하기" type="Accept" press="onPayment" visible="{= !${cart>/editMode} }"/>
                         <Button
@@ -157,7 +175,6 @@
                             visible="{= ${cart>/editMode} }" />
                   </Toolbar>
                 </footer>
-
 
             </Page>
         </f:endColumnPages>

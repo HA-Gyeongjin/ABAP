@@ -42,14 +42,14 @@ sap.ui.define([
             var oSelectedProduct = oCartModel.getProperty("/selectedProduct");
 
             // Check if selectedProduct is defined and not empty
-            if (!oSelectedProduct || !oSelectedProduct.Maktx) {
-                sap.m.MessageToast.show("No product selected to add to the cart.");
+            if (!oSelectedProduct || !oSelectedProduct.Maktx || !oSelectedProduct.selectedOption || !oSelectedProduct.selectedOption.key) {
+                sap.m.MessageToast.show("장바구니에 추가된 상품이 없습니다.");
                 return;
             }
 
             var aCartItems = oCartModel.getProperty("/cartItems");
             var oExistingItem = aCartItems.find(function(item) {
-                return item.Maktx === oSelectedProduct.Maktx;
+                return item.Maktx === oSelectedProduct.Maktx && item.selectedOption.key === oSelectedProduct.selectedOption.key;
             });
 
             if (oExistingItem) {
@@ -57,8 +57,9 @@ sap.ui.define([
             } else {
                 oSelectedProduct.Quantity = "1.00"; // 초기 수량을 소수점 두 자리로 설정
                 oSelectedProduct.Image = "../images/" + oSelectedProduct.Maktx + ".jpg"; // 이미지 경로 추가
-                aCartItems.push(oSelectedProduct);
+                aCartItems.push(JSON.parse(JSON.stringify(oSelectedProduct))); // Deep copy to avoid reference issues
             }
+
 
             oCartModel.setProperty("/cartItems", aCartItems);
             // Update total price
@@ -68,19 +69,29 @@ sap.ui.define([
         _updateTotalPrice: function () {
             var oCartModel = this.getView().getModel("cart");
             var aCartItems = oCartModel.getProperty("/cartItems");
-            var fTotalPrice = aCartItems.reduce(function (fSum, oItem) {
-                return fSum + (oItem.Netpr * oItem.Quantity);
-            }, 0);
-            oCartModel.setProperty("/totalPrice", fTotalPrice.toFixed(2)); // 총 금액을 소수점 두 자리로 설정
+            var fTotalPrice = 0;
+
+            aCartItems.forEach(function (oItem) {
+                var fItemPrice = parseFloat(oItem.selectedOption.additionalText.replace(/[^0-9.-]+/g, "")); // Extract numeric price
+                fTotalPrice += fItemPrice * parseFloat(oItem.Quantity);
+            });
+
+            oCartModel.setProperty("/totalPrice", fTotalPrice); // 총 금액을 소수점 두 자리로 설정
         },
 
         onSelectProduct: function (oEvent) {
             var oProduct = oEvent.getSource().getBindingContext().getObject();
             var oView = this.getView();
             var oCartModel = oView.getModel("cart");
-
             
             oCartModel.setProperty("/selectedProduct", oProduct);
+
+            var oSelect = this.byId("idToSelect");
+            oSelect.bindElement({
+                path: "/ListItemSet('" + oProduct.Matnr + "')"
+            });
+
+            console.log(oSelect);
             
             // Set additional text based on the value of oProduct.Maktx
             switch (oProduct.Maktx) {
@@ -132,6 +143,7 @@ sap.ui.define([
             var oButton = oEvent.getSource();
             var oItemContext = oButton.getBindingContext("cart");
             var sEntryId = oItemContext.getObject().Maktx;
+            var sSelectedKey = oItemContext.getObject().selectedOption.key;
             var oCartModel = oItemContext.getModel();
             var aCartItems = oCartModel.getProperty("/cartItems");
         
@@ -141,7 +153,7 @@ sap.ui.define([
                 onClose: function (oAction) {
                     if (oAction === "삭제") {
                         var aUpdatedCartItems = aCartItems.filter(function(item) {
-                            return item.Maktx !== sEntryId;
+                            return item.Maktx !== sEntryId || item.selectedOption.key !== sSelectedKey;
                         });
         
                         oCartModel.setProperty("/cartItems", aUpdatedCartItems);
@@ -165,6 +177,40 @@ sap.ui.define([
                 // 카트에 아이템이 없을 경우 메시지 표시
                 sap.m.MessageToast.show("장바구니에 상품이 없습니다.");
             }
+        },
+
+        onSelectChange: function (oEvent) {
+            var oSelectedItem = oEvent.getParameter("selectedItem");
+            var sSelectedKey = oSelectedItem.getKey();
+            var sSelectedText = oSelectedItem.getText();
+            var sAdditionalText = oSelectedItem.getAdditionalText();
+            
+            var oCartModel = this.getView().getModel("cart");
+            var oSelectedProduct = oCartModel.getProperty("/selectedProduct");
+            
+            // Update selected product details
+            oSelectedProduct.selectedOption = {
+                key: sSelectedKey,
+                text: sSelectedText,
+                additionalText: sAdditionalText
+            };
+        
+            // Bind product details to the selected product in the cart model
+            oCartModel.setProperty("/selectedProduct", oSelectedProduct);
+        
+            // Optionally, if additional details need to be fetched from an OData service, implement the logic here
+            // Example: this._fetchProductDetails(sSelectedKey);
+        
+            // Update product details view
+            var oProductDetailsVBox = this.byId("productDetails");
+            oProductDetailsVBox.bindElement({
+                path: "/selectedProduct",
+                model: "cart"
+            });
+            
+            console.log(oSelectedProduct);
+
+            this._updateTotalPrice();
         }
         
     });

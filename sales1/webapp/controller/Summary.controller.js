@@ -68,14 +68,17 @@ sap.ui.define([
             var oCartModel = this.getOwnerComponent().getModel("cart");
             var sPaymentType = oCartModel.getProperty("/summaryData/selectedPaymentType");
 
-            MessageBox.confirm("Proceed with the payment?", {
-                title: "Confirm Payment",
+            MessageBox.confirm("결제를 진행하시겠습니까?", {
+                title: "결제 확인창",
                 actions: [MessageBox.Action.OK, MessageBox.Action.CANCEL],
                 onClose: function (oAction) {
                     if (oAction === MessageBox.Action.OK) {
                         // summaryData 설정
                         var oSummaryData = this._prepareSummaryData(oCartModel);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7df2af6a4de5eb2044176dbff60ad74effe8f7fd
                         localStorage.setItem("summaryData", JSON.stringify(oSummaryData)); // 데이터를 로컬 스토리지에 저장
 
                         if (sPaymentType === "KakaoPay") {
@@ -88,6 +91,10 @@ sap.ui.define([
             });
         },
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 7df2af6a4de5eb2044176dbff60ad74effe8f7fd
         _prepareSummaryData: function (oCartModel) {
             var oCartItems = oCartModel.getProperty("/cartItems");
 
@@ -97,14 +104,23 @@ sap.ui.define([
                 Subcmon: "00",
                 toItem: oCartItems.map(function (item) {
                     return {
+<<<<<<< HEAD
                         Matnr: item.Matnr,
                         Netpr: item.Netpr,
                         Menge: parseFloat(item.Quantity).toFixed(2) // 타입 변환
+=======
+                        
+                        Matnr: item.Matnr,
+                        Netpr: item.Netpr,
+                        Menge: item.Menge
+
+>>>>>>> 7df2af6a4de5eb2044176dbff60ad74effe8f7fd
                     };
                 })
             };
 
             return oSummaryData;
+<<<<<<< HEAD
         },
 
             // _callKakaoPayAPI: function (oSummaryData) {
@@ -139,6 +155,47 @@ sap.ui.define([
                 });
             },
 
+=======
+            
+        },
+
+        _callKakaoPayAPI: function (oSummaryData) {
+            // var oCartModel = this.getView().getModel("cart");
+            // var oSummaryData = oCartModel.getProperty("/summaryData");
+=======
+        _callKakaoPayAPI: function () {
+            var oCartModel = this.getView().getModel("cart");
+            var oSummaryData = oCartModel.getProperty("/summaryData");
+>>>>>>> 45d139682c93c543d084270a457b4a802ea528f4
+        
+            console.log("Calling KakaoPay API with data:", oSummaryData);
+        
+            $.ajax({
+                url: "http://localhost:3000/pay",
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    amount: oSummaryData.toItem.reduce(function (sum, item) {
+                        return sum + parseFloat(item.Netpr);
+                    }, 0),
+                    item_name: "SSP 싱싱필 영양제"
+                }),
+                success: function (response) {
+                    console.log("KakaoPay API response:", response);
+                    if (response.next_redirect_pc_url) {
+                        window.location.href = response.next_redirect_pc_url;
+                    } else {
+                        MessageBox.error("카카오페이 결제시스템 실행에 실패했습니다.");
+                    }
+                },
+                error: function (error) {
+                    console.error("카카오페이 호출 중 오류:", error);
+                    MessageBox.error("카카오페이 실행 오류: " + error.responseText);
+                }
+            });
+        },
+
+>>>>>>> 7df2af6a4de5eb2044176dbff60ad74effe8f7fd
         _navigateToSuccess: function () {
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
             oRouter.navTo("RouteSuccess"); // Success 페이지로 이동

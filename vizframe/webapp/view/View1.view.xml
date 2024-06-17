@@ -1,6 +1,6 @@
 <mvc:View xmlns:table="sap.ui.table"
+controllerName="sync.ec.vizframe.controller.View1"
     xmlns="sap.m"
-    controllerName="sync.ec.vizframe.controller.View1"
     xmlns:viz="sap.viz.ui5.controls"
     displayBlock="true"
     xmlns:layout="sap.ui.layout"
